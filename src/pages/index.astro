@@ -1,16 +1,82 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import fetchApi, { getStrapiMediaUrl } from "../lib/Strapi";
+import { type Home } from "../types/Home";
 
+const homepageData = await fetchApi<Home>({
+  endpoint: "home",
+  wrappedByKey: "attributes",
+  query: { "populate[0]": "Logo", "populate[1]": "ImageCarousel" },
+});
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Home" isHome>
+  <div
+    class="fixed top-0 w-full h-screen transition-all ease-in-out duration-500"
+    _="on click add .-translate-y-full to me then hide me with ease then wait 400ms then go to url /about"
+  >
+    <div class="swiper">
+      <div id="wallpaper-swiper">
+        <div class="swiper-wrapper">
+          {
+            (homepageData.ImageCarousel?.data ?? []).map((image) => (
+              <div class="swiper-slide">
+                <div class="aspect-h-3 aspect-w-4 overflow-hidden bg-gray-100">
+                  <div
+                    style={`background-image: url('${getStrapiMediaUrl(
+                      image?.attributes?.url ?? null
+                    )}')`}
+                    class="bg-cover bg-no-repeat bg-center h-screen"
+                  />
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="w-full text-center text-white text-xl leading-6 absolute bottom-10 z-10"
+    >
+      <span
+        class="text-center inline-block transition-all ease-in-out duration-700"
+        _="on load repeat toggle .-translate-y-10 until transitionend then wait for transitionend end"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="w-8 h-8 text-white"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M9.47 15.28a.75.75 0 0 0 1.06 0l4.25-4.25a.75.75 0 1 0-1.06-1.06L10 13.69 6.28 9.97a.75.75 0 0 0-1.06 1.06l4.25 4.25ZM5.22 6.03l4.25 4.25a.75.75 0 0 0 1.06 0l4.25-4.25a.75.75 0 0 0-1.06-1.06L10 8.69 6.28 4.97a.75.75 0 0 0-1.06 1.06Z"
+            clip-rule="evenodd"></path>
+        </svg>
+      </span>
+
+      <p>
+        {homepageData.CTA}
+      </p>
+    </div>
+  </div>
+
+  <script
+    is:inline
+    src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  />
+
+  <script is:inline>
+    const s = new Swiper("#wallpaper-swiper", {
+      effect: "fade",
+      fadeEffect: {
+        crossFade: true,
+      },
+    });
+    s.autoplay.start();
+  </script>
+</Layout>

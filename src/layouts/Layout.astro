@@ -1,0 +1,146 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+export interface Props {
+  title?: string;
+  ogImageUrl?: string;
+  ogDescription?: string;
+  isError?: boolean;
+  isHome?: boolean;
+  url?: string;
+}
+
+const pageTitle = [Astro.props.title, "LifeofMarrow"]
+  .filter(Boolean)
+  .join(" | ");
+
+const imageUrl = Astro.props.ogImageUrl || "/logo.png";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>
+      {pageTitle}
+    </title>
+
+    <script is:inline src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script is:inline src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer></script>
+
+    <meta property="title" content={pageTitle} />
+    <meta
+      property="og:url"
+      content={Astro.props.url || "https://lifeofmarrow.com"}
+    />
+    <meta property="og:type" content="website" />
+    <meta name="title" property="og:title" content={pageTitle} />
+    <meta name="image" property="og:image" content={imageUrl} />
+    <meta
+      name="description"
+      property="og:description"
+      content={Astro.props.ogDescription ?? ""}
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta
+      name="twitter:description"
+      content={Astro.props.ogDescription ?? ""}
+    />
+    <meta name="twitter:image:src" content={imageUrl} />
+    <meta name="twitter:domain" content="https://lifeofmarrow.com" />
+  </head>
+  <body>
+    <Header isHome={Astro.props.isHome} />
+
+    <!-- {
+      !Astro.props.isError ? (
+        <div class="absolute top-1 h-full right-5 text-lg before:block before:h-screen before:pointer-events-none">
+          <a
+            href="#"
+            class="sticky top-88vh rounded-md bg-blue border border-solid border-orange border-1 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange"
+          >
+            Scroll up <span aria-hidden="true">&uarr;</span>
+          </a>
+        </div>
+      ) : null
+    } -->
+
+    <slot />
+
+    <Footer />
+
+    <script is:inline>
+      _hyperscript.config.hideShowStrategies = {
+        ease: function (op, element) {
+          const showClasses = [
+            "ease-out",
+            "opacity-100",
+            "translate-y-0",
+            "duration-200",
+          ];
+          const hideClasses = [
+            "ease-in",
+            "opacity-0",
+            "translate-y-1",
+            "duration-150",
+          ];
+
+          if (op === "show") {
+            element.classList.remove("hidden");
+            element.classList.add(...showClasses);
+            element.classList.remove(...hideClasses);
+          } else {
+            element.classList.remove(...showClasses);
+            element.classList.add(...hideClasses);
+
+            setTimeout(() => element.classList.add("hidden"), 150);
+          }
+        },
+      };
+    </script>
+
+    <style>
+      @font-face {
+        font-family: "Antipasto";
+        src: url("/fonts/Antipasto-RegularTrial.ttf");
+      }
+
+      @font-face {
+        font-family: "Antipasto-Light";
+        src: url("/fonts/Antipasto-ExtraLightTrial.ttf");
+      }
+
+      @font-face {
+        font-family: "Antipasto-Bold";
+        src: url("/fonts/Antipasto-ExtraBoldTrial.ttf");
+      }
+
+      @font-face {
+        font-family: "OpenSans-Bold";
+        src: url("/fonts/OpenSans-Bold.ttf");
+      }
+
+      @font-face {
+        font-family: "OpenSans";
+        src: url("/fonts/OpenSans-Regular.ttf");
+      }
+
+      @font-face {
+        font-family: "OpenSans-ExtraBold";
+        src: url("/fonts/OpenSans-ExtraBold.ttf");
+      }
+
+      strong {
+        font-family: "OpenSans-ExtraBold";
+      }
+    </style>
+  </body>
+</html>
