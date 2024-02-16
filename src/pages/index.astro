@@ -1,5 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "../layouts/layout.astro";
 import fetchApi, { getStrapiMediaUrl } from "../lib/Strapi";
 import { type Home } from "../types/Home";
 
@@ -13,7 +13,7 @@ const homepageData = await fetchApi<Home>({
 <Layout title="Home" isHome>
   <div
     class="fixed top-0 w-full h-screen transition-all ease-in-out duration-500"
-    _="on click add .-translate-y-full to me then hide me with ease then wait 400ms then go to url /about"
+    _="on click add .-translate-y-full to me then wait 200ms hide me with opacity then wait 400ms then go to url /about"
   >
     <div class="swiper">
       <div id="wallpaper-swiper">

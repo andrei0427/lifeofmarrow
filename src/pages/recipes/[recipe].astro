@@ -1,0 +1,20 @@
+---
+import Layout from "../../layouts/layout.astro";
+import fetchApi from "../../lib/Strapi";
+import type { Recipe } from "../../types/Recipe";
+
+const pageData = await fetchApi<Recipe>({
+  endpoint: "/recipes/1",
+  query: {
+    "populate[0]": "meal_type",
+    "populate[1]": "cuisine",
+    "populate[2]": "duration",
+    "populate[3]": "requirements",
+    "populate[4]": "Images",
+  },
+});
+
+console.log({ pageData });
+---
+
+<Layout title="Recipe" />

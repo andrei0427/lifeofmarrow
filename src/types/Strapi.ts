@@ -13,8 +13,14 @@ export interface StrapiMediaType {
   url: string;
 }
 
+export interface CTA {
+  Title: string;
+  Link: string;
+}
+
 export interface ContentSection {
   Title: string;
   Image: StrapiMedia;
   Text: string;
+  CTALink?: CTA;
 }
