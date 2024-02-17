@@ -1,0 +1,114 @@
+package layout
+
+import "fmt"
+
+func formatTitle(title string) string {
+	return fmt.Sprintf("%s | LifeofMarrow", title)
+}
+
+type SEOInfo struct {
+	Title       string
+	Url         string
+	ImageUrl    string
+	Description string
+	IsHome      bool
+}
+
+templ Base(seoInfo SEOInfo, children... templ.Component) {
+	<html>
+		<head>
+			<meta charset="utf-8"/>
+			<link rel="icon" type="image/png" href="/static/img/favicon.png"/>
+			<meta name="viewport" content="width=device-width"/>
+			<title>
+				{ formatTitle(seoInfo.Title) }
+			</title>
+			<link href="/static/css/tailwind.css" rel="stylesheet"/>
+			<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+			<script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+			<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+			<meta property="title" content=""/>
+			<meta property="og:url" content="https://lifeofmarrow.com"/>
+			<meta property="og:type" content="website"/>
+			<meta name="title" property="og:title" content={ formatTitle(seoInfo.Title) }/>
+			<meta name="image" property="og:image" content={ seoInfo.ImageUrl }/>
+			<meta name="description" property="og:description" content={ seoInfo.Description }/>
+			<meta name="twitter:card" content="summary" content={ seoInfo.Description }/>
+			<meta name="twitter:title" content={ formatTitle(seoInfo.Title) }/>
+			<meta name="twitter:description" content={ seoInfo.Description }/>
+			<meta name="twitter:image:src" content={ seoInfo.ImageUrl }/>
+			<meta name="twitter:domain" content="https://lifeofmarrow.com"/>
+			<style type="text/css">
+		@font-face {
+			font-family: "Antipasto";
+			src: url("/static/fonts/Antipasto-RegularTrial.ttf");
+		}
+
+		@font-face {
+			font-family: "Antipasto-Light";
+			src: url("/static/fonts/Antipasto-ExtraLightTrial.ttf");
+		}
+
+		@font-face {
+			font-family: "Antipasto-Bold";
+			src: url("/static/fonts/Antipasto-ExtraBoldTrial.ttf");
+		}
+
+		@font-face {
+			font-family: "OpenSans-Bold";
+			src: url("/static/fonts/OpenSans-Bold.ttf");
+		}
+
+		@font-face {
+			font-family: "OpenSans";
+			src: url("/static/fonts/OpenSans-Regular.ttf");
+		}
+
+		@font-face {
+			font-family: "OpenSans-ExtraBold";
+			src: url("/static/fonts/OpenSans-ExtraBold.ttf");
+		}
+
+		strong {
+			font-family: "OpenSans-ExtraBold";
+		}
+	</style>
+		</head>
+		<body>
+			for _, child := range children {
+				@child
+			}
+			@hyperscriptInit()
+		</body>
+	</html>
+}
+
+script hyperscriptInit() {
+_hyperscript.config.hideShowStrategies = {
+ease: function (op, element) {
+const showClasses = [
+"ease-out",
+"opacity-100",
+"translate-y-0",
+"duration-200",
+];
+const hideClasses = [
+"ease-in",
+"opacity-0",
+"translate-y-1",
+"duration-150",
+];
+
+if (op === "show") {
+element.classList.remove("hidden");
+element.classList.add(...showClasses);
+element.classList.remove(...hideClasses);
+} else {
+element.classList.remove(...showClasses);
+element.classList.add(...hideClasses);
+
+setTimeout(() => element.classList.add("hidden"), 150);
+}
+},
+};
+}
