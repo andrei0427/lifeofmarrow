@@ -11,21 +11,19 @@ import (
 func TestStrapiApiUnwrapByAttributes(t *testing.T) {
 	initEnv(t)
 
-	res, err := FetchStrapi[pages.HomeEntity](StrapiQueryOptions{
-		Endpoint:           "/home",
-		UnwrapByAttributes: true,
+	res, err := GetRecordFromStrapi[pages.HomeEntity](StrapiQueryOptions{
+		Endpoint: "/home",
 	})
 
 	assert.Nil(t, err)
-	assert.True(t, len(res.CTA) > 0)
+	assert.True(t, len(res.Data.Attributes.CTA) > 0)
 }
 
 func TestStrapiApiUnwrapByAttributesWithRelations(t *testing.T) {
 	initEnv(t)
 
-	res, err := FetchStrapi[pages.HomeEntity](StrapiQueryOptions{
-		Endpoint:           "/home",
-		UnwrapByAttributes: true,
+	res, err := GetRecordFromStrapi[pages.HomeEntity](StrapiQueryOptions{
+		Endpoint: "/home",
 		Params: []StrapiKeyValue{
 			{
 				Key: "populate[0]", Value: "ImageCarousel",
@@ -34,7 +32,7 @@ func TestStrapiApiUnwrapByAttributesWithRelations(t *testing.T) {
 	})
 
 	assert.Nil(t, err)
-	assert.True(t, len(res.ImageCarousel.Data) > 0)
+	assert.True(t, len(res.Data.Attributes.ImageCarousel.Data) > 0)
 }
 
 func initEnv(t *testing.T) {

@@ -1,7 +1,8 @@
 package handlers
 
 import (
-	"github.com/a-h/templ"
+	"net/http"
+
 	"github.com/andrei0427/lifeofmarrow/internal"
 	"github.com/andrei0427/lifeofmarrow/view/layout"
 	"github.com/andrei0427/lifeofmarrow/view/pages"
@@ -9,16 +10,21 @@ import (
 	"github.com/andrei0427/lifeofmarrow/view/partial"
 )
 
-func HandleIndex() *templ.ComponentHandler {
+func HandleIndex(w http.ResponseWriter, r *http.Request) {
+	// Handle attempts to browse pages that are not handled in the mux
+	if r.URL.Path != "/" {
+		http.Redirect(w, r, "/404", http.StatusMovedPermanently)
+		return
+	}
+
 	seo := layout.SEOInfo{
 		Title:  "Home",
 		Url:    "/",
 		IsHome: true,
 	}
 
-	props, err := internal.FetchStrapi[pages.HomeEntity](internal.StrapiQueryOptions{
-		Endpoint:           "home",
-		UnwrapByAttributes: true,
+	props, err := internal.GetRecordFromStrapi[pages.HomeEntity](internal.StrapiQueryOptions{
+		Endpoint: "home",
 		Params: []internal.StrapiKeyValue{
 			{
 				Key: "populate[0]", Value: "ImageCarousel",
@@ -26,8 +32,8 @@ func HandleIndex() *templ.ComponentHandler {
 		},
 	})
 	if err != nil {
-		return templ.Handler(layout.Base(seo, partial.Header(false), error.InternalServerError()))
+		layout.Base(seo, partial.Header(false), error.InternalServerError()).Render(r.Context(), w)
 	}
 
-	return templ.Handler(layout.Base(seo, partial.Header(seo.IsHome), pages.Index(*props)))
+	layout.Base(seo, partial.Header(seo.IsHome), pages.Index(props.Data.Attributes)).Render(r.Context(), w)
 }

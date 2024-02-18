@@ -13,9 +13,9 @@ import "bytes"
 import "github.com/andrei0427/lifeofmarrow/view/helpers"
 
 type HomeEntity struct {
-	CTA           string
-	Logo          helpers.StrapiMedia
-	ImageCarousel helpers.StrapiMediaCollection
+	CTA           string                        `json:"CTA"`
+	Logo          helpers.StrapiMedia           `json:"Logo"`
+	ImageCarousel helpers.StrapiMediaCollection `json:"ImageCarousel"`
 }
 
 func Index(props HomeEntity) templ.Component {
@@ -31,7 +31,7 @@ func Index(props HomeEntity) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"fixed top-0 w-full h-screen transition-all ease-in-out duration-500\" _=\"on click add .-translate-y-full to me then wait 200ms hide me with opacity then wait 400ms then go to url /about\"><div class=\"swiper\"><div id=\"wallpaper-swiper\"><div class=\"swiper-wrapper\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"fixed top-0 w-full h-screen transition-all ease-in-out duration-500\" _=\"on click add .-translate-y-full to me settle go to url /about remove .-translate-y-full from me\"><div class=\"swiper\"><div id=\"wallpaper-swiper\"><div class=\"swiper-wrapper\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

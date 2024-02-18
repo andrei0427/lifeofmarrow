@@ -1,0 +1,113 @@
+package partial
+
+import (
+	"fmt"
+	"github.com/andrei0427/lifeofmarrow/view/helpers"
+)
+
+type RecipeEntity struct {
+	Title        string                        `json:"Title"`
+	MealType     MealType                      `json:"meal_type"`
+	Cuisine      Cuisine                       `json:"cuisine"`
+	Duration     Duration                      `json:"duration"`
+	Requirements Requirements                  `json:"requirements"`
+	Images       helpers.StrapiMediaCollection `json:"Images"`
+	Method       string                        `json:"Method"`
+	Foreword     string                        `json:"Foreword"`
+	Ingredients  string                        `json:"Ingredients"`
+}
+
+type MealType struct {
+	Data struct {
+		Attributes struct {
+			Type string `json:"Type"`
+		} `json:"attributes"`
+	} `json:"Data"`
+}
+
+type Cuisine struct {
+	Data struct {
+		Attributes struct {
+			Cuisine string `json:"Cuisine"`
+		} `json:"attributes"`
+	} `json:"Data"`
+}
+
+type Duration struct {
+	Data struct {
+		Attributes struct {
+			Time string `json:"Time"`
+		} `json:"attributes"`
+	} `json:"Data"`
+}
+
+type Requirements struct {
+	Data []struct {
+		id         int
+		Attributes struct {
+			Requirement string `json:"Requirement"`
+		} `json:"attributes"`
+	} `json:"Data"`
+}
+
+templ RecipeTile(i int, r RecipeEntity) {
+	<div
+		class="bg-white relative hover:text-emerald-600"
+		_={ fmt.Sprintf(`
+					on mouseover add .scale-90 to #img-%d add .text-emerald-600 to #link-%d end
+					on mouseout remove .scale-90 from #img-%d remove .text-emerald-600 from #link-%d end`,
+					i,i,i,i) }
+	>
+		<a href={ templ.SafeURL("/") } class="opacity-0 transition-all duration-500" _="init remove .opacity-0 from me">
+			<div id={ fmt.Sprintf("img-%d", i) } class="transition-all ease-in-out duration-150">
+				<div class="absolute top-3 left-3 text-white font-medium text-lg z-[5]">
+					if len(r.MealType.Data.Attributes.Type) > 0 {
+						<div class="inline-flex uppercase items-baseline rounded-full mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
+							<span class="sr-only">Type</span>
+							{ r.MealType.Data.Attributes.Type }
+						</div>
+					}
+					if len(r.Cuisine.Data.Attributes.Cuisine) > 0 {
+						<div class="inline-flex uppercase items-baseline rounded-full mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
+							<span class="sr-only">Cuisine</span>
+							{ r.Cuisine.Data.Attributes.Cuisine }
+						</div>
+					}
+					if len(r.Duration.Data.Attributes.Time) > 0 {
+						<div class="inline-flex uppercase items-baseline rounded-full mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
+							<span class="sr-only">Duration</span>
+							{ r.Duration.Data.Attributes.Time }
+						</div>
+					}
+					if len(r.Requirements.Data) > 0 {
+						<div class="inline-flex uppercase items-baseline rounded-full mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
+							<span class="sr-only">Requirements</span>
+							for i, req := range r.Requirements.Data {
+								{ req.Attributes.Requirement }
+								if len(r.Requirements.Data) -1>i {
+									,
+								}
+							}
+						</div>
+					}
+				</div>
+				if len(r.Images.Data) > 0 {
+					<img
+						src={ helpers.GetStrapiMediaUrl(r.Images.Data[0].Attributes.Url) }
+						class="object-cover aspect-1"
+					/>
+				} else {
+					<img
+						src="/static/img/logo-responsive.png"
+						class="object-cover aspect-1 transition-all ease-in-out duration-150"
+					/>
+				}
+			</div>
+			<div class="py-4 text-gray-900">
+				<h3 id={ fmt.Sprintf("link-%d", i) } class="text-center text-xl font-serif font-bold leading-6">
+					{ r.Title }
+				</h3>
+			</div>
+		</a>
+	</div>
+}

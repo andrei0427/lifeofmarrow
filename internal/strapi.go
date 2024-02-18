@@ -16,12 +16,72 @@ type StrapiKeyValue struct {
 	Value string
 }
 type StrapiQueryOptions struct {
-	Endpoint           string
-	UnwrapByAttributes bool
-	Params             []StrapiKeyValue
+	Endpoint     string
+	IsCollection bool
+	Params       []StrapiKeyValue
 }
 
-func FetchStrapi[T any](opts StrapiQueryOptions) (*T, error) {
+type StrapiResponseWrappedByAttributes[T any] struct {
+	Data struct {
+		id         int
+		Attributes T `json:"attributes"`
+	} `json:"data"`
+}
+
+type StrapiCollectionResponseWrappedByAttributes[T any] struct {
+	Data []struct {
+		id         int
+		Attributes T `json:"attributes"`
+	} `json:"data"`
+}
+
+func GetRecordFromStrapi[T any](opts StrapiQueryOptions) (*StrapiResponseWrappedByAttributes[T], error) {
+	if cached, ok := Cache.Get(opts.Endpoint); ok {
+		cast := (*cached).(*StrapiResponseWrappedByAttributes[T])
+		return cast, nil
+	}
+
+	body, err := fetchStrapi(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	data := new(StrapiResponseWrappedByAttributes[T])
+	err = json.Unmarshal(*body, data)
+	if err != nil {
+		log.Printf("error when unmarshalling response from strapi: %s", err)
+		return nil, fmt.Errorf("internal server error")
+	}
+
+	Cache.Set(opts.Endpoint, data)
+
+	return data, nil
+}
+
+func GetRecordCollectionFromStrapi[T any](opts StrapiQueryOptions) (*StrapiCollectionResponseWrappedByAttributes[T], error) {
+	if cached, ok := Cache.Get(opts.Endpoint); ok {
+		cast := (*cached).(*StrapiCollectionResponseWrappedByAttributes[T])
+		return cast, nil
+	}
+
+	body, err := fetchStrapi(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	data := new(StrapiCollectionResponseWrappedByAttributes[T])
+	err = json.Unmarshal(*body, data)
+	if err != nil {
+		log.Printf("error when unmarshalling response from strapi: %s", err)
+		return nil, fmt.Errorf("internal server error")
+	}
+
+	Cache.Set(opts.Endpoint, data)
+
+	return data, nil
+}
+
+func fetchStrapi(opts StrapiQueryOptions) (*[]byte, error) {
 	if opts.Endpoint[0] == '/' {
 		opts.Endpoint = strings.TrimPrefix(opts.Endpoint, "/")
 	}
@@ -70,41 +130,5 @@ func FetchStrapi[T any](opts StrapiQueryOptions) (*T, error) {
 		return nil, fmt.Errorf("internal server error")
 	}
 
-	data, err := unmarshalStrapiResponse[T](body, opts.UnwrapByAttributes)
-	if err != nil {
-		log.Printf("error when unmarshalling response from strapi: %s", err)
-		return nil, fmt.Errorf("internal server error")
-	}
-
-	return data, nil
-}
-
-type StrapiResponse[T any] struct {
-	Data T `json:"data"`
-}
-
-type StrapiResponseWrappedByAttributes[T any] struct {
-	Data struct {
-		Attributes T `json:"attributes"`
-	} `json:"data"`
-}
-
-func unmarshalStrapiResponse[T any](body []byte, unwrapByAttributes bool) (*T, error) {
-	if unwrapByAttributes {
-		data := new(StrapiResponseWrappedByAttributes[T])
-		err := json.Unmarshal(body, &data)
-		if err != nil {
-			return nil, err
-		}
-
-		return &data.Data.Attributes, nil
-	} else {
-		data := new(StrapiResponse[T])
-		err := json.Unmarshal(body, &data)
-		if err != nil {
-			return nil, err
-		}
-
-		return &data.Data, nil
-	}
+	return &body, nil
 }

@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/andrei0427/lifeofmarrow/internal"
 	"github.com/andrei0427/lifeofmarrow/internal/handlers"
 	"github.com/joho/godotenv"
 )
@@ -15,21 +16,29 @@ func main() {
 		log.Fatal(fmt.Errorf("error reading env file: %s", err))
 	}
 
-	initHttp()
+	server := initHttp()
+	log.Fatal(server.ListenAndServe())
 }
 
-func initHttp() {
+func initHttp() *http.Server {
 	mux := http.NewServeMux()
+	internal.Cache = internal.NewCache()
 
 	fs := http.FileServer(http.Dir("./static"))
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	mux.Handle("/", handlers.HandleIndex())
+	mux.HandleFunc("/purge", handlers.HandlePurge)
 
-	server := &http.Server{
+	mux.HandleFunc("/about", handlers.HandleAbout)
+	mux.HandleFunc("/recipes", handlers.HandleRecipes)
+
+	mux.HandleFunc("/404", handlers.Handle404)
+	mux.HandleFunc("/503", handlers.Handle503)
+
+	mux.HandleFunc("/", handlers.HandleIndex)
+
+	return &http.Server{
 		Addr:    "localhost:8080",
 		Handler: mux,
 	}
-
-	log.Fatal(server.ListenAndServe())
 }
