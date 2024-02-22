@@ -16,11 +16,10 @@ func main() {
 		log.Fatal(fmt.Errorf("error reading env file: %s", err))
 	}
 
-	server := initHttp()
-	log.Fatal(server.ListenAndServe())
+	log.Fatal(initHttp())
 }
 
-func initHttp() *http.Server {
+func initHttp() error {
 	mux := http.NewServeMux()
 	internal.Cache = internal.NewCache()
 
@@ -30,6 +29,8 @@ func initHttp() *http.Server {
 	mux.HandleFunc("/purge", handlers.HandlePurge)
 
 	mux.HandleFunc("/about", handlers.HandleAbout)
+
+	mux.HandleFunc("/recipes/{p}", handlers.HandleRecipesPage)
 	mux.HandleFunc("/recipes", handlers.HandleRecipes)
 
 	mux.HandleFunc("/404", handlers.Handle404)
@@ -37,8 +38,5 @@ func initHttp() *http.Server {
 
 	mux.HandleFunc("/", handlers.HandleIndex)
 
-	return &http.Server{
-		Addr:    "localhost:8080",
-		Handler: mux,
-	}
+	return http.ListenAndServe("localhost:8080", mux)
 }

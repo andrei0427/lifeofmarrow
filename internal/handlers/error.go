@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/andrei0427/lifeofmarrow/view/layout"
-	"github.com/andrei0427/lifeofmarrow/view/pages/error"
+	"github.com/andrei0427/lifeofmarrow/view/pages/errors"
 	"github.com/andrei0427/lifeofmarrow/view/partial"
 )
 
@@ -15,7 +15,7 @@ func Handle404(w http.ResponseWriter, r *http.Request) {
 			Url:   "/404",
 		},
 		partial.Header(false),
-		error.NotFoundError(),
+		errors.NotFoundError(),
 	).Render(r.Context(), w)
 }
 
@@ -26,6 +26,6 @@ func Handle503(w http.ResponseWriter, r *http.Request) {
 			Url:   "/503",
 		},
 		partial.Header(false),
-		error.InternalServerError(),
+		errors.InternalServerError(),
 	).Render(r.Context(), w)
 }

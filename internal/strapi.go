@@ -21,23 +21,23 @@ type StrapiQueryOptions struct {
 	Params       []StrapiKeyValue
 }
 
-type StrapiResponseWrappedByAttributes[T any] struct {
+type StrapiResponse[T any] struct {
 	Data struct {
 		id         int
 		Attributes T `json:"attributes"`
 	} `json:"data"`
 }
 
-type StrapiCollectionResponseWrappedByAttributes[T any] struct {
+type StrapiCollectionResponse[T any] struct {
 	Data []struct {
-		id         int
-		Attributes T `json:"attributes"`
+		Id         int `json:"id"`
+		Attributes T   `json:"attributes"`
 	} `json:"data"`
 }
 
-func GetRecordFromStrapi[T any](opts StrapiQueryOptions) (*StrapiResponseWrappedByAttributes[T], error) {
+func GetRecordFromStrapi[T any](opts StrapiQueryOptions) (*StrapiResponse[T], error) {
 	if cached, ok := Cache.Get(opts.Endpoint); ok {
-		cast := (*cached).(*StrapiResponseWrappedByAttributes[T])
+		cast := (*cached).(*StrapiResponse[T])
 		return cast, nil
 	}
 
@@ -46,7 +46,7 @@ func GetRecordFromStrapi[T any](opts StrapiQueryOptions) (*StrapiResponseWrapped
 		return nil, err
 	}
 
-	data := new(StrapiResponseWrappedByAttributes[T])
+	data := new(StrapiResponse[T])
 	err = json.Unmarshal(*body, data)
 	if err != nil {
 		log.Printf("error when unmarshalling response from strapi: %s", err)
@@ -58,9 +58,9 @@ func GetRecordFromStrapi[T any](opts StrapiQueryOptions) (*StrapiResponseWrapped
 	return data, nil
 }
 
-func GetRecordCollectionFromStrapi[T any](opts StrapiQueryOptions) (*StrapiCollectionResponseWrappedByAttributes[T], error) {
+func GetRecordCollectionFromStrapi[T any](opts StrapiQueryOptions) (*StrapiCollectionResponse[T], error) {
 	if cached, ok := Cache.Get(opts.Endpoint); ok {
-		cast := (*cached).(*StrapiCollectionResponseWrappedByAttributes[T])
+		cast := (*cached).(*StrapiCollectionResponse[T])
 		return cast, nil
 	}
 
@@ -69,7 +69,7 @@ func GetRecordCollectionFromStrapi[T any](opts StrapiQueryOptions) (*StrapiColle
 		return nil, err
 	}
 
-	data := new(StrapiCollectionResponseWrappedByAttributes[T])
+	data := new(StrapiCollectionResponse[T])
 	err = json.Unmarshal(*body, data)
 	if err != nil {
 		log.Printf("error when unmarshalling response from strapi: %s", err)

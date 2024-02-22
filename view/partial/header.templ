@@ -13,6 +13,7 @@ templ Header(isHome bool) {
 				<button
 					type="button"
 					class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+					_="on click remove .hidden from #mobile-menu transition #mobile-menu's opacity to 1 over 200ms"
 				>
 					<span class="sr-only">Open main menu</span>
 					<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -178,9 +179,12 @@ templ Header(isHome bool) {
 			</div>
 		</nav>
 		<!-- Mobile menu, show/hide based on menu open state. -->
-		<div class="lg:hidden" role="dialog" aria-modal="true">
+		<div id="mobile-menu" class="hidden opacity-0 lg:hidden" role="dialog" aria-modal="true">
 			<!-- Background backdrop, show/hide based on slide-over state. -->
-			<div class="fixed inset-0 z-10"></div>
+			<div
+				class="fixed inset-0 z-10"
+				_="on click transition #mobile-menu's opacity to 0 over 150ms then add .hidden to #mobile-menu"
+			></div>
 			<div
 				class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
 			>
@@ -189,7 +193,7 @@ templ Header(isHome bool) {
 						<span class="sr-only">LifeofMarrow</span>
 						<img class="h-24 w-auto" src="/static/img/logo-responsive.png" alt="side menu logo"/>
 					</a>
-					<button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
+					<button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" _="on click transition #mobile-menu's opacity to 0 over 150ms then add .hidden to #mobile-menu">
 						<span class="sr-only">Close menu</span>
 						<svg
 							class="h-6 w-6"
@@ -207,13 +211,22 @@ templ Header(isHome bool) {
 					<div class="-my-6 divide-y divide-gray-500/10">
 						<div class="space-y-2 py-6">
 							<div class="-mx-3">
+								<a
+									href="/about"
+									class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+								>About</a>
+								<a
+									href="/recipes"
+									class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+								>Recipes</a>
 								<button
 									type="button"
-									class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+									_="on click toggle .rotate-180 on <svg/> in me toggle .hidden on the next <div/>"
+									class="-mx-3 flex w-full items-center justify-between rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
 									aria-controls="disclosure-1"
 									aria-expanded="false"
 								>
-									Product
+									Store & Services
 									<!--
                   Expand/collapse icon, toggle classes based on menu open state.
 
@@ -233,102 +246,15 @@ templ Header(isHome bool) {
 										href="#"
 										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
 									>Analytics</a>
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>Engagement</a>
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>Security</a>
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>Integrations</a>
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>Automations</a>
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>
-										Watch
-										demo
-									</a>
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>
-										Contact
-										sales
-									</a>
-								</div>
-							</div>
-							<a
-								href="#"
-								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>Features</a>
-							<a
-								href="#"
-								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>Marketplace</a>
-							<div class="-mx-3">
-								<button
-									type="button"
-									class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									aria-controls="disclosure-2"
-									aria-expanded="false"
-								>
-									Company
-									<!--
-                  Expand/collapse icon, toggle classes based on menu open state.
-
-                  Open: "rotate-180", Closed: ""
-                -->
-									<svg class="h-5 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-										<path
-											fill-rule="evenodd"
-											d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-											clip-rule="evenodd"
-										></path>
-									</svg>
-								</button>
-								<!-- 'Company' sub-menu, show/hide based on menu state. -->
-								<div class="mt-2 space-y-2" id="disclosure-2">
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>
-										About
-										us
-									</a>
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>Careers</a>
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>Support</a>
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>Press</a>
-									<a
-										href="#"
-										class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-									>Blog</a>
 								</div>
 							</div>
 						</div>
 						<div class="py-6">
 							<a
-								href="#"
+								href="/contact"
 								class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
 							>
-								Log
-								in
+								Get in touch
 							</a>
 						</div>
 					</div>

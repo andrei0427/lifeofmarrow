@@ -17,10 +17,10 @@ import (
 
 type RecipeEntity struct {
 	Title        string                        `json:"Title"`
-	MealType     MealType                      `json:"meal_type"`
-	Cuisine      Cuisine                       `json:"cuisine"`
-	Duration     Duration                      `json:"duration"`
-	Requirements Requirements                  `json:"requirements"`
+	MealType     MealTypeRelation              `json:"meal_type"`
+	Cuisine      CuisineRelation               `json:"cuisine"`
+	Duration     DurationRelation              `json:"duration"`
+	Requirements RequirementsRelation          `json:"requirements"`
 	Images       helpers.StrapiMediaCollection `json:"Images"`
 	Method       string                        `json:"Method"`
 	Foreword     string                        `json:"Foreword"`
@@ -28,39 +28,46 @@ type RecipeEntity struct {
 }
 
 type MealType struct {
+	Type string `json:"Type"`
+}
+type MealTypeRelation struct {
 	Data struct {
-		Attributes struct {
-			Type string `json:"Type"`
-		} `json:"attributes"`
+		Id         int      `json:"id"`
+		Attributes MealType `json:"attributes"`
 	} `json:"Data"`
 }
 
 type Cuisine struct {
+	Cuisine string `json:"Cuisine"`
+}
+type CuisineRelation struct {
 	Data struct {
-		Attributes struct {
-			Cuisine string `json:"Cuisine"`
-		} `json:"attributes"`
+		Id         int     `json:"id"`
+		Attributes Cuisine `json:"attributes"`
 	} `json:"Data"`
 }
 
 type Duration struct {
+	Time string `json:"Time"`
+}
+type DurationRelation struct {
 	Data struct {
-		Attributes struct {
-			Time string `json:"Time"`
-		} `json:"attributes"`
+		Id         int      `json:"id"`
+		Attributes Duration `json:"attributes"`
 	} `json:"Data"`
 }
 
 type Requirements struct {
+	Requirement string `json:"Requirement"`
+}
+type RequirementsRelation struct {
 	Data []struct {
-		id         int
-		Attributes struct {
-			Requirement string `json:"Requirement"`
-		} `json:"attributes"`
+		Id         int          `json:"id"`
+		Attributes Requirements `json:"attributes"`
 	} `json:"Data"`
 }
 
-func RecipeTile(i int, r RecipeEntity) templ.Component {
+func RecipeTile(r RecipeEntity, pageNo int, isLast bool) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -77,10 +84,8 @@ func RecipeTile(i int, r RecipeEntity) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf(`
-					on mouseover add .scale-90 to #img-%d add .text-emerald-600 to #link-%d end
-					on mouseout remove .scale-90 from #img-%d remove .text-emerald-600 from #link-%d end`,
-			i, i, i, i)))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(`on mouseover add .scale-90 to (.img in me) add .text-gray-900 to (<h3/> in me) end
+				on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (<h3/> in me) end`))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -93,15 +98,7 @@ func RecipeTile(i int, r RecipeEntity) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"opacity-0 transition-all duration-500\" _=\"init remove .opacity-0 from me\"><div id=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("img-%d", i)))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"transition-all ease-in-out duration-150\"><div class=\"absolute top-3 left-3 text-white font-medium text-lg z-[5]\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"opacity-0 transition-all duration-500\" _=\"init remove .opacity-0 from me\"><div class=\"img transition-all ease-in-out duration-150\"><div class=\"absolute top-3 left-3 text-white font-medium text-lg z-[5]\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -113,7 +110,7 @@ func RecipeTile(i int, r RecipeEntity) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(r.MealType.Data.Attributes.Type)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_tile.templ`, Line: 66, Col: 40}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_tile.templ`, Line: 71, Col: 40}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -132,7 +129,7 @@ func RecipeTile(i int, r RecipeEntity) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(r.Cuisine.Data.Attributes.Cuisine)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_tile.templ`, Line: 72, Col: 42}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_tile.templ`, Line: 77, Col: 42}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -151,7 +148,7 @@ func RecipeTile(i int, r RecipeEntity) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(r.Duration.Data.Attributes.Time)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_tile.templ`, Line: 78, Col: 40}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_tile.templ`, Line: 83, Col: 40}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -171,7 +168,7 @@ func RecipeTile(i int, r RecipeEntity) templ.Component {
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(req.Attributes.Requirement)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_tile.templ`, Line: 85, Col: 36}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_tile.templ`, Line: 90, Col: 36}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
@@ -216,22 +213,14 @@ func RecipeTile(i int, r RecipeEntity) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"py-4 text-gray-900\"><h3 id=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("link-%d", i)))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"text-center text-xl font-serif font-bold leading-6\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"py-4 text-emerald-600\"><h3 class=\"text-center text-xl font-sans font-bold leading-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(r.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_tile.templ`, Line: 107, Col: 14}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_tile.templ`, Line: 112, Col: 14}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -241,9 +230,39 @@ func RecipeTile(i int, r RecipeEntity) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
+		if isLast {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("pager-%d", pageNo)))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-params=\"*\" hx-trigger=\"revealed\" hx-swap=\"outerHTML\"></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = updatePager(pageNo).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
 		if !templ_7745c5c3_IsBuffer {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)
 		}
 		return templ_7745c5c3_Err
 	})
+}
+
+func updatePager(pageNo int) templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_updatePager_a3fd`,
+		Function: `function __templ_updatePager_a3fd(pageNo){const elm = document.getElementById("pager-"+pageNo);
+	elm.setAttribute("hx-get", location.pathname + "/" + (pageNo+1) + location.search );
+	htmx.process(elm);
+}`,
+		Call:       templ.SafeScript(`__templ_updatePager_a3fd`, pageNo),
+		CallInline: templ.SafeScriptInline(`__templ_updatePager_a3fd`, pageNo),
+	}
 }

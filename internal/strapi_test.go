@@ -3,15 +3,20 @@ package internal
 import (
 	"testing"
 
-	"github.com/andrei0427/lifeofmarrow/view/pages"
+	"github.com/andrei0427/lifeofmarrow/view/helpers"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 )
 
+type Home struct {
+	CTA           string                        `json:"CTA"`
+	ImageCarousel helpers.StrapiMediaCollection `json:"ImageCarousel"`
+}
+
 func TestStrapiApiUnwrapByAttributes(t *testing.T) {
 	initEnv(t)
 
-	res, err := GetRecordFromStrapi[pages.HomeEntity](StrapiQueryOptions{
+	res, err := GetRecordFromStrapi[Home](StrapiQueryOptions{
 		Endpoint: "/home",
 	})
 
@@ -22,7 +27,7 @@ func TestStrapiApiUnwrapByAttributes(t *testing.T) {
 func TestStrapiApiUnwrapByAttributesWithRelations(t *testing.T) {
 	initEnv(t)
 
-	res, err := GetRecordFromStrapi[pages.HomeEntity](StrapiQueryOptions{
+	res, err := GetRecordFromStrapi[Home](StrapiQueryOptions{
 		Endpoint: "/home",
 		Params: []StrapiKeyValue{
 			{

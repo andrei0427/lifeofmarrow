@@ -2,12 +2,14 @@ package internal
 
 import (
 	"fmt"
+	"log"
 	"sync"
 )
 
 var Cache Cacher
 
 type Cacher interface {
+	Has(string) bool
 	Get(string) (*any, bool)
 	Set(string, any) error
 	Invalidate(string) error
@@ -27,12 +29,20 @@ func NewCache() Cacher {
 	}
 }
 
+func (c *InMemoryCache) Has(key string) bool {
+	c.muData.RLock()
+	defer c.muData.RUnlock()
+
+	_, ok := c.data[key]
+	return ok
+}
+
 func (c *InMemoryCache) Get(key string) (*any, bool) {
 	c.muData.RLock()
 	defer c.muData.RUnlock()
 
 	val, ok := c.data[key]
-	return val, ok && val != nil
+	return val, ok
 }
 
 func (c *InMemoryCache) Set(key string, val any) error {
@@ -55,7 +65,9 @@ func (c *InMemoryCache) Invalidate(key string) error {
 		return fmt.Errorf("cache key %s doesn't exist", key)
 	}
 
-	c.data[key] = nil
+	log.Printf("purging cache for %s", key)
+
+	delete(c.data, key)
 	return nil
 }
 

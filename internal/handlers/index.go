@@ -6,7 +6,7 @@ import (
 	"github.com/andrei0427/lifeofmarrow/internal"
 	"github.com/andrei0427/lifeofmarrow/view/layout"
 	"github.com/andrei0427/lifeofmarrow/view/pages"
-	"github.com/andrei0427/lifeofmarrow/view/pages/error"
+	"github.com/andrei0427/lifeofmarrow/view/pages/errors"
 	"github.com/andrei0427/lifeofmarrow/view/partial"
 )
 
@@ -32,7 +32,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 		},
 	})
 	if err != nil {
-		layout.Base(seo, partial.Header(false), error.InternalServerError()).Render(r.Context(), w)
+		layout.Base(seo, partial.Header(false), errors.InternalServerError()).Render(r.Context(), w)
 	}
 
 	layout.Base(seo, partial.Header(seo.IsHome), pages.Index(props.Data.Attributes)).Render(r.Context(), w)
