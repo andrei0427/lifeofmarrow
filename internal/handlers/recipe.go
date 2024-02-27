@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -10,50 +12,12 @@ import (
 	"github.com/andrei0427/lifeofmarrow/view/pages"
 	"github.com/andrei0427/lifeofmarrow/view/pages/errors"
 	"github.com/andrei0427/lifeofmarrow/view/partial"
+	"github.com/gosimple/slug"
 )
 
 const pageSize = 6
 
-type RecipeFilters struct {
-	MealType     string
-	Cuisine      string
-	Duration     string
-	Requirements string
-	Search       string
-}
-
-func readFilters(r *http.Request) *RecipeFilters {
-	filters := RecipeFilters{}
-
-	mealtype := r.URL.Query().Get("mealtype")
-	if len(mealtype) > 0 {
-		filters.MealType = mealtype
-	}
-
-	cuisine := r.URL.Query().Get("cuisine")
-	if len(cuisine) > 0 {
-		filters.Cuisine = cuisine
-	}
-
-	duration := r.URL.Query().Get("duration")
-	if len(duration) > 0 {
-		filters.Duration = duration
-	}
-
-	reqs := r.URL.Query().Get("requirements")
-	if len(reqs) > 0 {
-		filters.Requirements = reqs
-	}
-
-	search := r.URL.Query().Get("search")
-	if len(search) > 0 {
-		filters.Search = search
-	}
-
-	return &filters
-}
-
-func getRecipes(pageNo int, filters RecipeFilters) (*[]partial.RecipeEntity, error) {
+func getRecipes(pageNo int, filters partial.SelectedRecipeFilters) (*[]partial.RecipeEntity, error) {
 	collection, err := internal.GetRecordCollectionFromStrapi[partial.RecipeEntity](internal.StrapiQueryOptions{
 		Endpoint: "recipes",
 		Params: []internal.StrapiKeyValue{
@@ -71,23 +35,24 @@ func getRecipes(pageNo int, filters RecipeFilters) (*[]partial.RecipeEntity, err
 
 	filtered := new([]partial.RecipeEntity)
 	for _, r := range collection.Data {
-		if len(filters.MealType) > 0 && !strings.Contains(strings.ToLower(filters.MealType), strings.ToLower(r.Attributes.MealType.Data.Attributes.Type)) {
+
+		if len(filters.SelectedMealTypes.Data) > 0 && !slices.Contains(filters.SelectedMealTypes.Data, r.Attributes.MealType.Data) {
 			continue
 		}
 
-		if len(filters.Cuisine) > 0 && !strings.Contains(strings.ToLower(filters.Cuisine), strings.ToLower(r.Attributes.Cuisine.Data.Attributes.Cuisine)) {
+		if len(filters.SelectedCuisines.Data) > 0 && !slices.Contains(filters.SelectedCuisines.Data, r.Attributes.Cuisine.Data) {
 			continue
 		}
 
-		if len(filters.Duration) > 0 && !strings.Contains(strings.ToLower(filters.Duration), strings.ToLower(r.Attributes.Duration.Data.Attributes.Time)) {
+		if len(filters.SelectedDurations.Data) > 0 && !slices.Contains(filters.SelectedDurations.Data, r.Attributes.Duration.Data) {
 			continue
 		}
 
-		if len(filters.Requirements) > 0 {
+		if len(filters.Requirements.Data) > 0 {
 			hasRequirement := false
-			lowerCase := strings.ToLower(filters.Requirements)
+
 			for _, req := range r.Attributes.Requirements.Data {
-				if strings.Contains(lowerCase, strings.ToLower(req.Attributes.Requirement)) {
+				if slices.Contains(filters.Requirements.Data, req) {
 					hasRequirement = true
 				}
 			}
@@ -97,11 +62,17 @@ func getRecipes(pageNo int, filters RecipeFilters) (*[]partial.RecipeEntity, err
 			}
 		}
 
-		if len(filters.Search) > 0 {
-			lowerCase := strings.ToLower(filters.Search)
+		if len(filters.SearchText) > 0 {
+			lowerCase := strings.ToLower(filters.SearchText)
 			if !strings.Contains(strings.ToLower(r.Attributes.Title), lowerCase) &&
 				!strings.Contains(strings.ToLower(r.Attributes.Ingredients), lowerCase) &&
 				!strings.Contains(strings.ToLower(r.Attributes.Method), lowerCase) {
+				continue
+			}
+		}
+
+		if len(filters.Slug) > 0 {
+			if slug.Make(r.Attributes.Title) != filters.Slug {
 				continue
 			}
 		}
@@ -126,62 +97,19 @@ func getRecipes(pageNo int, filters RecipeFilters) (*[]partial.RecipeEntity, err
 }
 
 func HandleRecipes(w http.ResponseWriter, r *http.Request) {
-	seo := layout.SEOInfo{
-		Title:       "Recipes",
-		Url:         "/recipes",
-		Description: "A wide variety of colorful, healthy and vegan recipes from my collection",
-	}
-
-	mealTypes, err := internal.GetRecordCollectionFromStrapi[partial.MealType](internal.StrapiQueryOptions{
-		Endpoint:     "meal-types",
-		IsCollection: true,
-	})
+	filters, err := partial.NewSelectedRecipeFilters(r)
 	if err != nil {
-		layout.Base(seo, partial.Header(false), errors.InternalServerError()).Render(r.Context(), w)
+		errors.InternalServerError().Render(r.Context(), w)
 		return
 	}
 
-	cuisines, err := internal.GetRecordCollectionFromStrapi[partial.Cuisine](internal.StrapiQueryOptions{
-		Endpoint:     "cuisines",
-		IsCollection: true,
-	})
+	props, err := getRecipes(1, *filters)
 	if err != nil {
-		layout.Base(seo, partial.Header(false), errors.InternalServerError()).Render(r.Context(), w)
+		errors.InternalServerError().Render(r.Context(), w)
 		return
 	}
 
-	durations, err := internal.GetRecordCollectionFromStrapi[partial.Duration](internal.StrapiQueryOptions{
-		Endpoint:     "durations",
-		IsCollection: true,
-	})
-	if err != nil {
-		layout.Base(seo, partial.Header(false), errors.InternalServerError()).Render(r.Context(), w)
-		return
-	}
-
-	requirements, err := internal.GetRecordCollectionFromStrapi[partial.Requirements](internal.StrapiQueryOptions{
-		Endpoint:     "requirements",
-		IsCollection: true,
-	})
-	if err != nil {
-		layout.Base(seo, partial.Header(false), errors.InternalServerError()).Render(r.Context(), w)
-		return
-	}
-
-	props, err := getRecipes(1, *readFilters(r))
-	if err != nil {
-		layout.Base(seo, partial.Header(false), errors.InternalServerError()).Render(r.Context(), w)
-		return
-	}
-
-	filterOpts := pages.RecipeFilters{
-		MealTypes:    *mealTypes,
-		Cuisines:     *cuisines,
-		Durations:    *durations,
-		Requirements: *requirements,
-	}
-
-	layout.Base(seo, partial.Header(false), pages.Recipes(*props, filterOpts)).Render(r.Context(), w)
+	pages.Recipes(*props, *filters).Render(r.Context(), w)
 }
 
 func HandleRecipesPage(w http.ResponseWriter, r *http.Request) {
@@ -197,7 +125,12 @@ func HandleRecipesPage(w http.ResponseWriter, r *http.Request) {
 	}
 	pageNo := max(1, dirtyPageNo)
 
-	props, err := getRecipes(pageNo, *readFilters(r))
+	filters, err := partial.NewSelectedRecipeFilters(r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	props, err := getRecipes(pageNo, *filters)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -206,4 +139,36 @@ func HandleRecipesPage(w http.ResponseWriter, r *http.Request) {
 	for i, rec := range *props {
 		partial.RecipeTile(rec, pageNo, len(*props) == i+1).Render(r.Context(), w)
 	}
+}
+
+func HandleRecipePage(w http.ResponseWriter, r *http.Request) {
+	seo := layout.SEOInfo{
+		Title:       "Recipes",
+		Url:         "/recipes",
+		Description: "A wide variety of colorful, healthy and vegan recipes from my collection",
+	}
+
+	slug := r.PathValue("slug")
+	if len(slug) == 0 {
+		errors.NotFoundError().Render(r.Context(), w)
+		return
+	}
+
+	recipe, err := getRecipes(1, partial.SelectedRecipeFilters{
+		Slug: slug,
+	})
+	if err != nil || len(*recipe) == 0 {
+		errors.NotFoundError().Render(r.Context(), w)
+		return
+	}
+
+	seo.Title = (*recipe)[0].Title
+	seo.Description = (*recipe)[0].Foreword
+	seo.Url = fmt.Sprintf("/recipe/%s", slug)
+
+	if len((*recipe)[0].Images.Data) > 0 {
+		seo.ImageUrl = (*recipe)[0].Images.Data[0].Attributes.Url
+	}
+
+	pages.Recipe().Render(r.Context(), w)
 }

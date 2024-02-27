@@ -1,0 +1,14 @@
+package pages
+
+import "github.com/andrei0427/lifeofmarrow/view/layout"
+
+templ Recipe() {
+	@layout.Base(layout.SEOInfo{
+		Title:       "Recipe",
+		Url:         "/recipe",
+		IsHome:      false,
+		Description: "Some recipe",
+	}) {
+		<div>This is a test</div>
+	}
+}

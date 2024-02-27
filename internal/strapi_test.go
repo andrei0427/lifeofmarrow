@@ -3,14 +3,15 @@ package internal
 import (
 	"testing"
 
-	"github.com/andrei0427/lifeofmarrow/view/helpers"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 )
 
 type Home struct {
-	CTA           string                        `json:"CTA"`
-	ImageCarousel helpers.StrapiMediaCollection `json:"ImageCarousel"`
+	CTA           string `json:"CTA"`
+	ImageCarousel struct {
+		Data []struct{} `json:"data"`
+	} `json:"ImageCarousel"`
 }
 
 func TestStrapiApiUnwrapByAttributes(t *testing.T) {

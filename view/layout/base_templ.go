@@ -11,6 +11,7 @@ import "io"
 import "bytes"
 
 import "fmt"
+import "github.com/andrei0427/lifeofmarrow/view/partial"
 
 func formatTitle(title string) string {
 	return fmt.Sprintf("%s | LifeofMarrow", title)
@@ -24,7 +25,7 @@ type SEOInfo struct {
 	IsHome      bool
 }
 
-func Base(seoInfo SEOInfo, children ...templ.Component) templ.Component {
+func Base(seoInfo SEOInfo) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -37,20 +38,20 @@ func Base(seoInfo SEOInfo, children ...templ.Component) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html><head><meta charset=\"utf-8\"><link rel=\"icon\" type=\"image/png\" href=\"/static/img/favicon.png\"><meta name=\"viewport\" content=\"width=device-width\"><title>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(formatTitle(seoInfo.Title))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/layout/base.templ`, Line: 23, Col: 32}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/layout/base.templ`, Line: 24, Col: 32}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><link href=\"/static/css/tailwind.css\" rel=\"stylesheet\"><script src=\"https://unpkg.com/htmx.org@1.9.10\"></script><script src=\"https://unpkg.com/hyperscript.org@0.9.12\"></script><script src=\"https://challenges.cloudflare.com/turnstile/v0/api.js\" async defer></script><meta property=\"title\" content=\"\"><meta property=\"og:url\" content=\"https://lifeofmarrow.com\"><meta property=\"og:type\" content=\"website\"><meta name=\"title\" property=\"og:title\" content=\"")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -58,7 +59,7 @@ func Base(seoInfo SEOInfo, children ...templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><meta name=\"image\" property=\"og:image\" content=\"")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 3)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -66,7 +67,7 @@ func Base(seoInfo SEOInfo, children ...templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><meta name=\"description\" property=\"og:description\" content=\"")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 4)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -74,7 +75,7 @@ func Base(seoInfo SEOInfo, children ...templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><meta name=\"twitter:card\" content=\"summary\" content=\"")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 5)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -82,7 +83,7 @@ func Base(seoInfo SEOInfo, children ...templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><meta name=\"twitter:title\" content=\"")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 6)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -90,7 +91,7 @@ func Base(seoInfo SEOInfo, children ...templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><meta name=\"twitter:description\" content=\"")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 7)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -98,7 +99,7 @@ func Base(seoInfo SEOInfo, children ...templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><meta name=\"twitter:image:src\" content=\"")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 8)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -106,17 +107,19 @@ func Base(seoInfo SEOInfo, children ...templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><meta name=\"twitter:domain\" content=\"https://lifeofmarrow.com\"><style type=\"text/css\">\n\t\t@font-face {\n\t\t\tfont-family: \"Antipasto\";\n\t\t\tsrc: url(\"/static/fonts/Antipasto-RegularTrial.ttf\");\n\t\t}\n\n\t\t@font-face {\n\t\t\tfont-family: \"Antipasto-Light\";\n\t\t\tsrc: url(\"/static/fonts/Antipasto-ExtraLightTrial.ttf\");\n\t\t}\n\n\t\t@font-face {\n\t\t\tfont-family: \"Antipasto-Bold\";\n\t\t\tsrc: url(\"/static/fonts/Antipasto-ExtraBoldTrial.ttf\");\n\t\t}\n\n\t\t@font-face {\n\t\t\tfont-family: \"OpenSans-Bold\";\n\t\t\tsrc: url(\"/static/fonts/OpenSans-Bold.ttf\");\n\t\t}\n\n\t\t@font-face {\n\t\t\tfont-family: \"OpenSans\";\n\t\t\tsrc: url(\"/static/fonts/OpenSans-Regular.ttf\");\n\t\t}\n\n\t\t@font-face {\n\t\t\tfont-family: \"OpenSans-ExtraBold\";\n\t\t\tsrc: url(\"/static/fonts/OpenSans-ExtraBold.ttf\");\n\t\t}\n\n\t\tstrong {\n\t\t\tfont-family: \"OpenSans-ExtraBold\";\n\t\t}\n\t</style></head><body>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 9)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, child := range children {
-			templ_7745c5c3_Err = child.Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
+		templ_7745c5c3_Err = partial.Header(seoInfo.IsHome).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"bg-white border-t-[0.5px] border-emerald-600\" aria-labelledby=\"footer-heading\"><h2 id=\"footer-heading\" class=\"sr-only\">Footer</h2><div class=\"mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8 lg:py-32\"><div class=\"xl:grid xl:grid-cols-3 xl:gap-8\"><img class=\"h-24\" src=\"/static/img/logo-responsive.png\" alt=\"LifeofMarrow\"><div class=\"mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0\"><div class=\"md:grid md:grid-cols-2 md:gap-8\"><div><h3 class=\"text-sm font-semibold leading-6 text-gray-900\">Solutions</h3><ul role=\"list\" class=\"mt-6 space-y-4\"><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Marketing</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Analytics</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Commerce</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Insights</a></li></ul></div><div class=\"mt-10 md:mt-0\"><h3 class=\"text-sm font-semibold leading-6 text-gray-900\">Support</h3><ul role=\"list\" class=\"mt-6 space-y-4\"><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Pricing</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Documentation</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Guides</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">API Status</a></li></ul></div></div><div class=\"md:grid md:grid-cols-2 md:gap-8\"><div><h3 class=\"text-sm font-semibold leading-6 text-gray-900\">Company</h3><ul role=\"list\" class=\"mt-6 space-y-4\"><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">About</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Blog</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Jobs</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Press</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Partners</a></li></ul></div><div class=\"mt-10 md:mt-0\"><h3 class=\"text-sm font-semibold leading-6 text-gray-900\">Legal</h3><ul role=\"list\" class=\"mt-6 space-y-4\"><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Claim</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Privacy</a></li><li><a href=\"#\" class=\"text-sm leading-6 text-gray-600 hover:text-gray-900\">Terms</a></li></ul></div></div></div></div></div></footer>")
+		templ_7745c5c3_Err = templ_7745c5c3_Var1.Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 10)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -124,7 +127,7 @@ func Base(seoInfo SEOInfo, children ...templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body></html>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 11)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

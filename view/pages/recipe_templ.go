@@ -10,12 +10,9 @@ import "context"
 import "io"
 import "bytes"
 
-import (
-	"github.com/andrei0427/lifeofmarrow/view/layout"
-	"github.com/andrei0427/lifeofmarrow/view/partial"
-)
+import "github.com/andrei0427/lifeofmarrow/view/layout"
 
-func Recipes(props []partial.RecipeEntity, filters partial.SelectedRecipeFilters) templ.Component {
+func Recipe() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -38,34 +35,16 @@ func Recipes(props []partial.RecipeEntity, filters partial.SelectedRecipeFilters
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = partial.RecipeFilters(filters).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			for i, r := range props {
-				templ_7745c5c3_Err = partial.RecipeTile(r, 1, len(props) == i+1).Render(ctx, templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 3)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
 			if !templ_7745c5c3_IsBuffer {
 				_, templ_7745c5c3_Err = io.Copy(templ_7745c5c3_W, templ_7745c5c3_Buffer)
 			}
 			return templ_7745c5c3_Err
 		})
 		templ_7745c5c3_Err = layout.Base(layout.SEOInfo{
-			Title:       "Recipes",
-			Url:         "/recipes",
+			Title:       "Recipe",
+			Url:         "/recipe",
 			IsHome:      false,
-			Description: "Feel free to explore the wide variety of my handpicked healthy, colorful vegan recipes.",
+			Description: "Some recipe",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

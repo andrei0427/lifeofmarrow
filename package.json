@@ -1,14 +1,4 @@
 {
-  "name": "lifeofmarrow",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "git@github.com:andrei0427/lifeofmarrow.git",
-  "author": "Andrei Debono <andrei0427@gmail.com>",
-  "license": "MIT",
-  "scripts": {
-    "build": "tailwindcss build -o static/css/tailwind.css --minify",
-    "watch": "tailwindcss build -o static/css/tailwind.css --watch"
-  },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.7",

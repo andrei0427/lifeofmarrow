@@ -1,6 +1,8 @@
 # build output
 bin/
 dist/
+vendor/
+tmp/
 # generated types
 .astro/
 

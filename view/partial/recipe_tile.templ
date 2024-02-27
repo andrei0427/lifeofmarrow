@@ -3,6 +3,7 @@ package partial
 import (
 	"fmt"
 	"github.com/andrei0427/lifeofmarrow/view/helpers"
+	"github.com/gosimple/slug"
 )
 
 type RecipeEntity struct {
@@ -63,7 +64,7 @@ templ RecipeTile(r RecipeEntity, pageNo int, isLast bool) {
 		_={ `on mouseover add .scale-90 to (.img in me) add .text-gray-900 to (<h3/> in me) end
 				on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (<h3/> in me) end` }
 	>
-		<a href={ templ.SafeURL("/") } class="opacity-0 transition-all duration-500" _="init remove .opacity-0 from me">
+		<a href={ templ.SafeURL(fmt.Sprintf("/recipe/%s",slug.Make(r.Title))) } class="opacity-0 transition-all duration-500" _="init remove .opacity-0 from me">
 			<div class="img transition-all ease-in-out duration-150">
 				<div class="absolute top-3 left-3 text-white font-medium text-lg z-[5]">
 					if len(r.MealType.Data.Attributes.Type) > 0 {
