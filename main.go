@@ -30,8 +30,7 @@ func initHttp() error {
 
 	mux.HandleFunc("/about", handlers.HandleAbout)
 
-	mux.HandleFunc("/recipes/{p}", handlers.HandleRecipesPage)
-	mux.HandleFunc("/recipes", handlers.HandleRecipes)
+	mux.HandleFunc("/recipes/{p...}", handlers.HandleRecipesPage)
 	mux.HandleFunc("/recipe/{slug}", handlers.HandleRecipePage)
 
 	mux.HandleFunc("/404", handlers.Handle404)

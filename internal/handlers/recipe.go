@@ -96,48 +96,43 @@ func getRecipes(pageNo int, filters partial.SelectedRecipeFilters) (*[]partial.R
 	return props, nil
 }
 
-func HandleRecipes(w http.ResponseWriter, r *http.Request) {
-	filters, err := partial.NewSelectedRecipeFilters(r)
-	if err != nil {
-		errors.InternalServerError().Render(r.Context(), w)
-		return
-	}
-
-	props, err := getRecipes(1, *filters)
-	if err != nil {
-		errors.InternalServerError().Render(r.Context(), w)
-		return
-	}
-
-	pages.Recipes(*props, *filters).Render(r.Context(), w)
-}
-
 func HandleRecipesPage(w http.ResponseWriter, r *http.Request) {
 	sPageNo := r.PathValue("p")
-	if len(sPageNo) == 0 {
-		w.WriteHeader(http.StatusBadRequest)
+	isHx := r.Header.Get("Hx-Request") == "true"
+
+	filters, err := partial.NewSelectedRecipeFilters(r)
+	if err != nil {
+		if isHx {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			errors.InternalServerError().Render(r.Context(), w)
+		}
 		return
 	}
+
 	dirtyPageNo, err := strconv.Atoi(sPageNo)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
+		dirtyPageNo = 1
 	}
 	pageNo := max(1, dirtyPageNo)
 
-	filters, err := partial.NewSelectedRecipeFilters(r)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
 	props, err := getRecipes(pageNo, *filters)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		if isHx {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			errors.InternalServerError().Render(r.Context(), w)
+		}
 		return
 	}
 
-	for i, rec := range *props {
-		partial.RecipeTile(rec, pageNo, len(*props) == i+1).Render(r.Context(), w)
+	if isHx {
+		partial.RecipeFilters(*filters).Render(r.Context(), w)
+		for i, rec := range *props {
+			partial.RecipeTile(rec, pageNo, len(*props) == i+1).Render(r.Context(), w)
+		}
+	} else {
+		pages.Recipes(*props, *filters).Render(r.Context(), w)
 	}
 }
 

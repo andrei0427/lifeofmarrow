@@ -70,9 +70,8 @@ func NewSelectedRecipeFilters(r *http.Request) (*SelectedRecipeFilters, error) {
 }
 
 func (f *SelectedRecipeFilters) readFilters(r *http.Request) {
-	rawMealtype := r.URL.Query().Get("mealtype")
-	if len(rawMealtype) > 0 {
-		mealtypes := strings.Split(rawMealtype, ",")
+	mealtypes := r.URL.Query()["mealtype"]
+	if len(mealtypes) > 0 {
 		for _, pmt := range mealtypes {
 			for _, mt := range f.MealTypes.Data {
 				if strings.EqualFold(mt.Attributes.Type, pmt) {
@@ -82,9 +81,8 @@ func (f *SelectedRecipeFilters) readFilters(r *http.Request) {
 		}
 	}
 
-	rawCuisine := r.URL.Query().Get("cuisine")
-	if len(rawCuisine) > 0 {
-		cuisines := strings.Split(rawCuisine, ",")
+	cuisines := r.URL.Query()["cuisine"]
+	if len(cuisines) > 0 {
 		for _, pc := range cuisines {
 			for _, c := range f.Cuisines.Data {
 				if strings.EqualFold(c.Attributes.Cuisine, pc) {
@@ -94,9 +92,8 @@ func (f *SelectedRecipeFilters) readFilters(r *http.Request) {
 		}
 	}
 
-	rawDuration := r.URL.Query().Get("duration")
-	if len(rawDuration) > 0 {
-		durations := strings.Split(rawDuration, ",")
+	durations := r.URL.Query()["duration"]
+	if len(durations) > 0 {
 		for _, pd := range durations {
 			for _, d := range f.Durations.Data {
 				if strings.EqualFold(d.Attributes.Time, pd) {
@@ -106,9 +103,8 @@ func (f *SelectedRecipeFilters) readFilters(r *http.Request) {
 		}
 	}
 
-	rawReqs := r.URL.Query().Get("requirements")
-	if len(rawReqs) > 0 {
-		requirements := strings.Split(rawReqs, ",")
+	requirements := r.URL.Query()["requirement"]
+	if len(requirements) > 0 {
 		for _, pr := range requirements {
 			for _, r := range f.Requirements.Data {
 				if strings.EqualFold(r.Attributes.Requirement, pr) {
@@ -122,10 +118,14 @@ func (f *SelectedRecipeFilters) readFilters(r *http.Request) {
 	if len(search) > 0 {
 		f.SearchText = search
 	}
+
 }
 
 templ RecipeFilters(filters SelectedRecipeFilters) {
-	<div id="filters-container">
+	<div
+		id="filters-container"
+		hx-swap-oob="true"
+	>
 		<div class="relative z-40 sm:hidden" role="dialog" aria-modal="true">
 			<!--
       Off-canvas menu backdrop, show/hide based on off-canvas menu state.
@@ -274,7 +274,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 		<section aria-labelledby="filter-heading">
 			<h2 id="filter-heading" class="sr-only">Filters</h2>
 			<div class="border-b border-gray-200 bg-white pb-4">
-				<div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+				<div class="mx-auto flex w-screen items-center justify-between px-4 sm:px-6 lg:px-8">
 					<!-- Mobile filter dialog toggle, controls the 'mobileFiltersOpen' state. -->
 					<button type="button" class="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden">Filters</button>
 					<div class="hidden sm:block">
@@ -292,7 +292,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 										if len(filters.SelectedMealTypes.Data) > 0 {
 											<span
 												id="mealtype-count"
-												class="hidden ml-1.5 rounded bg-emerald-600 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-white"
+												class="ml-1.5 rounded bg-emerald-600 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-white"
 											>{ fmt.Sprint(len(filters.SelectedMealTypes.Data)) }</span>
 										}
 										<svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -305,10 +305,15 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 												<div class="flex items-center">
 													<input
 														id={ fmt.Sprintf("mealtype-%d", mt.Id) }
-														name="mealtype[]"
-														value={ mt.Attributes.Type }
 														type="checkbox"
 														class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+														name="mealtype"
+														data-value={ mt.Attributes.Type }
+														onChange="toggleFilter(event)"
+														hx-trigger="query"
+														hx-target="#recipe-results"
+														hx-swap="innerHTML"
+														hx-push-url="true"
 														if slices.Contains(filters.SelectedMealTypes.Data, mt) {
 															checked
 														}
@@ -331,7 +336,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 										if len(filters.SelectedCuisines.Data) > 0 {
 											<span
 												id="cuisine-count"
-												class="hidden ml-1.5 rounded bg-emerald-600 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-white"
+												class="ml-1.5 rounded bg-emerald-600 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-white"
 											>{ fmt.Sprint(len(filters.SelectedCuisines.Data)) }</span>
 										}
 										<svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -344,10 +349,18 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 												<div class="flex items-center">
 													<input
 														id={ fmt.Sprintf("cuisine-%d", c.Id) }
-														name="cuisine[]"
-														value={ c.Attributes.Cuisine }
+														name="cuisine"
+														data-value={ c.Attributes.Cuisine }
 														type="checkbox"
 														class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+														hx-trigger="query"
+														hx-target="#recipe-results"
+														hx-swap="innerHTML"
+														onChange="toggleFilter(event)"
+														hx-push-url="true"
+														if slices.Contains(filters.SelectedCuisines.Data, c) {
+															checked
+														}
 													/>
 													<label
 														for={ fmt.Sprintf("cuisine-%d", c.Id) }
@@ -370,7 +383,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 										if len(filters.SelectedDurations.Data) > 0 {
 											<span
 												id="duration-count"
-												class="hidden ml-1.5 rounded bg-emerald-600 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-white"
+												class=" ml-1.5 rounded bg-emerald-600 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-white"
 											>{ fmt.Sprint(len(filters.SelectedDurations.Data)) }</span>
 										}
 										<svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -383,10 +396,18 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 												<div class="flex items-center">
 													<input
 														id={ fmt.Sprintf("duration-%d", d.Id) }
-														name="duration[]"
-														value={ d.Attributes.Time }
+														name="duration"
+														data-value={ d.Attributes.Time }
 														type="checkbox"
 														class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+														hx-trigger="query"
+														hx-target="#recipe-results"
+														hx-swap="innerHTML"
+														onChange="toggleFilter(event)"
+														hx-push-url="true"
+														if slices.Contains(filters.SelectedDurations.Data, d) {
+															checked
+														}
 													/>
 													<label for={ fmt.Sprintf("duration-%d", d.Id) } class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">{ d.Attributes.Time }</label>
 												</div>
@@ -406,7 +427,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 										if len(filters.SelectedRequirements.Data) > 0 {
 											<span
 												id="requirements-count"
-												class="hidden ml-1.5 rounded bg-emerald-600 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-white"
+												class="ml-1.5 rounded bg-emerald-600 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-white"
 											>{ fmt.Sprint(len(filters.SelectedRequirements.Data)) }</span>
 										}
 										<svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -419,10 +440,18 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 												<div class="flex items-center">
 													<input
 														id={ fmt.Sprintf("req-%d", r.Id) }
-														name="requirement[]"
-														value={ r.Attributes.Requirement }
+														name="requirement"
+														data-value={ r.Attributes.Requirement }
 														type="checkbox"
 														class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+														hx-push-url="true"
+														hx-trigger="query"
+														hx-target="#recipe-results"
+														hx-swap="innerHTML"
+														onChange="toggleFilter(event)"
+														if slices.Contains(filters.SelectedRequirements.Data, r) {
+															checked
+														}
 													/>
 													<label for={ fmt.Sprintf("req-%d", r.Id) } class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">{ r.Attributes.Requirement }</label>
 												</div>
@@ -442,81 +471,174 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 									</svg>
 								</span>
 							</div>
-							<input type="text" name="ingredient" id="ingredient" class="block w-full rounded-md border-0 py-1.5 pl-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6" placeholder="Aubergine"/>
+							<input
+								hx-trigger="keyup changed delay:1s"
+								hx-target="#recipe-results"
+								hx-swap="innerHTML"
+								hx-push-url="true"
+								onKeyup="handleSearch(event)"
+								type="text"
+								name="search"
+								id="search"
+								value={ filters.SearchText }
+								class="block w-full rounded-md border-0 py-1.5 pl-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
+								placeholder="Aubergine"
+							/>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- Active filters -->
-			<div class="bg-gray-100">
-				<div class="mx-auto max-w-7xl px-4 py-3 sm:flex sm:items-center sm:px-6 lg:px-8">
-					<h3 class="text-sm font-medium text-gray-500">
-						Filters
-						<span class="sr-only">, active</span>
-					</h3>
-					<div aria-hidden="true" class="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block"></div>
-					for _, smt := range filters.SelectedMealTypes.Data {
-						<div id={ fmt.Sprintf("filter-mt-%d", smt.Id) } class="mt-2 sm:ml-4 sm:mt-0">
-							<div class="-m-1 flex flex-wrap items-center">
-								<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
-									<span>{ smt.Attributes.Type }</span>
-									<button type="button" class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500">
-										<span class="sr-only">Remove filter for { smt.Attributes.Type }</span>
-										<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-											<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
-										</svg>
-									</button>
-								</span>
+			if len(filters.SelectedMealTypes.Data) > 0 || len(filters.SelectedCuisines.Data) > 0 || len(filters.SelectedDurations.Data) > 0 || len(filters.SelectedRequirements.Data) > 0 {
+				<div class="bg-gray-100">
+					<div class="mx-auto max-w-7xl px-4 py-3 sm:flex sm:items-center sm:px-6 lg:px-8">
+						<h3 class="text-sm font-medium text-gray-500">
+							Filters
+							<span class="sr-only">, active</span>
+						</h3>
+						<div aria-hidden="true" class="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block"></div>
+						for _, smt := range filters.SelectedMealTypes.Data {
+							<div id={ fmt.Sprintf("filter-mt-%d", smt.Id) } class="mt-2 sm:ml-4 sm:mt-0">
+								<div class="-m-1 flex flex-wrap items-center">
+									<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
+										<span>{ smt.Attributes.Type }</span>
+										<button
+											name="mealtype"
+											data-value={ smt.Attributes.Type }
+											onClick="toggleFilter(event, true)"
+											type="button"
+											class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+											hx-trigger="query"
+											hx-push-url="true"
+											hx-target="#recipe-results"
+											hx-swap="innerHTML"
+										>
+											<span class="sr-only">Remove filter for { smt.Attributes.Type }</span>
+											<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+												<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
+											</svg>
+										</button>
+									</span>
+								</div>
 							</div>
-						</div>
-					}
-					for _, c := range filters.SelectedCuisines.Data {
-						<div id={ fmt.Sprintf("filter-c-%d", c.Id) } class="mt-2 sm:ml-4 sm:mt-0">
-							<div class="-m-1 flex flex-wrap items-center">
-								<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
-									<span>{ c.Attributes.Cuisine }</span>
-									<button type="button" class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500">
-										<span class="sr-only">Remove filter for { c.Attributes.Cuisine }</span>
-										<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-											<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
-										</svg>
-									</button>
-								</span>
+						}
+						for _, c := range filters.SelectedCuisines.Data {
+							<div id={ fmt.Sprintf("filter-c-%d", c.Id) } class="mt-2 sm:ml-4 sm:mt-0">
+								<div class="-m-1 flex flex-wrap items-center">
+									<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
+										<span>{ c.Attributes.Cuisine }</span>
+										<button
+											name="cuisine"
+											data-value={ c.Attributes.Cuisine }
+											onClick="toggleFilter(event, true)"
+											type="button"
+											class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+											hx-trigger="query"
+											hx-push-url="true"
+											hx-target="#recipe-results"
+											hx-swap="innerHTML"
+										>
+											<span class="sr-only">Remove filter for { c.Attributes.Cuisine }</span>
+											<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+												<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
+											</svg>
+										</button>
+									</span>
+								</div>
 							</div>
-						</div>
-					}
-					for _, d := range filters.SelectedDurations.Data {
-						<div id={ fmt.Sprintf("filter-d-%d", d.Id) } class="mt-2 sm:ml-4 sm:mt-0">
-							<div class="-m-1 flex flex-wrap items-center">
-								<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
-									<span>{ d.Attributes.Time }</span>
-									<button type="button" class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500">
-										<span class="sr-only">Remove filter for { d.Attributes.Time }</span>
-										<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-											<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
-										</svg>
-									</button>
-								</span>
+						}
+						for _, d := range filters.SelectedDurations.Data {
+							<div id={ fmt.Sprintf("filter-d-%d", d.Id) } class="mt-2 sm:ml-4 sm:mt-0">
+								<div class="-m-1 flex flex-wrap items-center">
+									<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
+										<span>{ d.Attributes.Time }</span>
+										<button
+											name="duration"
+											data-value={ d.Attributes.Time }
+											onClick="toggleFilter(event, true)"
+											type="button"
+											class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+											hx-push-url="true"
+											hx-trigger="query"
+											hx-target="#recipe-results"
+											hx-swap="innerHTML"
+										>
+											<span class="sr-only">Remove filter for { d.Attributes.Time }</span>
+											<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+												<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
+											</svg>
+										</button>
+									</span>
+								</div>
 							</div>
-						</div>
-					}
-					for _, r := range filters.SelectedRequirements.Data {
-						<div id={ fmt.Sprintf("filter-r-%d", r.Id) } class="mt-2 sm:ml-4 sm:mt-0">
-							<div class="-m-1 flex flex-wrap items-center">
-								<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
-									<span>{ r.Attributes.Requirement }</span>
-									<button type="button" class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500">
-										<span class="sr-only">Remove filter for { r.Attributes.Requirement }</span>
-										<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-											<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
-										</svg>
-									</button>
-								</span>
+						}
+						for _, r := range filters.SelectedRequirements.Data {
+							<div id={ fmt.Sprintf("filter-r-%d", r.Id) } class="mt-2 sm:ml-4 sm:mt-0">
+								<div class="-m-1 flex flex-wrap items-center">
+									<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
+										<span>{ r.Attributes.Requirement }</span>
+										<button
+											name="requirement"
+											data-value={ r.Attributes.Requirement }
+											onClick="toggleFilter(event, true)"
+											type="button"
+											class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+											hx-trigger="query"
+											hx-push-url="true"
+											hx-target="#recipe-results"
+											hx-swap="innerHTML"
+										>
+											<span class="sr-only">Remove filter for { r.Attributes.Requirement }</span>
+											<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+												<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
+											</svg>
+										</button>
+									</span>
+								</div>
 							</div>
-						</div>
-					}
+						}
+					</div>
 				</div>
-			</div>
+			}
 		</section>
 	</div>
+	<script>
+	function handleSearch({target}){
+		const {name: key, value} = target;
+		
+		const params = new URLSearchParams(window.location.search);
+		const kv = Array.from(params.entries()).filter(([k,v]) => k !== key && v !== '');
+
+		const newUrl = window.location.pathname + '?' + kv.map(([k,v]) => `${k}=${v}`).join('&');
+		target.setAttribute('hx-get', newUrl);
+
+
+		htmx.process(target);
+	}
+
+	function toggleFilter(event, isButton){
+		let target = event.target;
+		
+		if(isButton){
+			target = target.closest('button');
+		}
+
+		const key = target.getAttribute('name');
+		const value = target.getAttribute('data-value');
+
+		const params = new URLSearchParams(window.location.search);
+		const hasParam = params.has(key, value);
+		const kv = Array.from(params.entries()).filter(([k,v]) => (!hasParam || k !== key || v !== value) && v !== 'on' && v !== '');
+
+		if(!hasParam){
+			kv.push([key, value]);
+		}
+
+		const newUrl = window.location.pathname + '?' + kv.map(([k,v]) => `${k}=${v}`).join('&');
+		target.setAttribute('hx-get', newUrl);
+
+		htmx.process(target);
+		htmx.trigger(target, 'query');
+	}
+	</script>
 }

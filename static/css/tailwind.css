@@ -2124,6 +2124,10 @@ select {
     padding-bottom: 8rem;
   }
 
+  .lg\:pr-8 {
+    padding-right: 2rem;
+  }
+
   .lg\:text-left {
     text-align: left;
   }
