@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/andrei0427/lifeofmarrow/internal"
 	"github.com/andrei0427/lifeofmarrow/internal/handlers"
@@ -36,5 +37,10 @@ func initHttp() error {
 
 	mux.HandleFunc("/", handlers.HandleIndex)
 
-	return http.ListenAndServe("localhost:8080", mux)
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "8080"
+	}
+
+	return http.ListenAndServe(fmt.Sprintf("localhost:%s", port), mux)
 }
