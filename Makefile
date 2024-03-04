@@ -16,7 +16,7 @@ install:
 	@npm install -D tailwindcss @tailwindcss/aspect-ratio @tailwindcss/forms @tailwindcss/typography
 
 build:
-	tailwindcss build -o static/css/tailwind.css
+	npm run tailwindcss 
 	@templ generate view
 	@go build -o bin/lifeofmarrow main.go
 

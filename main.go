@@ -27,9 +27,7 @@ func initHttp() error {
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	mux.HandleFunc("/purge", handlers.HandlePurge)
-
 	mux.HandleFunc("/about", handlers.HandleAbout)
-
 	mux.HandleFunc("/recipes/{p...}", handlers.HandleRecipesPage)
 	mux.HandleFunc("/recipe/{slug}", handlers.HandleRecipePage)
 

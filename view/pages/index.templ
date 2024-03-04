@@ -24,7 +24,7 @@ templ Index(props HomeEntity) {
 					<div class="swiper-wrapper">
 						for _, slide := range props.ImageCarousel.Data {
 							<div class="swiper-slide">
-								<div class="aspect-h-3 aspect-w-4 overflow-hidden bg-gray-100">
+								<div class="aspect-h-3 aspect-w-4 bg-gray-100">
 									<div data-url={ helpers.GetStrapiMediaUrl(slide.Attributes.Url) } class="slide bg-cover bg-no-repeat bg-center h-screen"></div>
 								</div>
 							</div>

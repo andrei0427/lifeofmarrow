@@ -1,17 +1,89 @@
 package pages
 
-import "github.com/andrei0427/lifeofmarrow/view/layout"
+import (
+	"github.com/andrei0427/lifeofmarrow/view/layout"
+	"github.com/andrei0427/lifeofmarrow/view/partial"
+	"github.com/gosimple/slug"
+	"github.com/andrei0427/lifeofmarrow/view/helpers"
+	"github.com/russross/blackfriday/v2"
 
-templ Recipe() {
+	"fmt"
+	"strings"
+)
+
+func getRecipeAttribs(r partial.RecipeEntity) []string {
+	strs := make([]string, 0)
+
+	if r.MealType.Data.Id > 0 {
+		strs = append(strs, r.MealType.Data.Attributes.Type)
+	}
+
+	if r.Cuisine.Data.Id > 0 {
+		strs = append(strs, r.Cuisine.Data.Attributes.Cuisine)
+	}
+
+	if r.Duration.Data.Id > 0 {
+		strs = append(strs, r.Duration.Data.Attributes.Time)
+	}
+
+	for _, req := range r.Requirements.Data {
+		strs = append(strs, req.Attributes.Requirement)
+	}
+
+	return strs
+}
+
+func mdToHtml(md string) string {
+	buf := []byte(md)
+	html := blackfriday.Run(buf)
+	return string(html)
+}
+
+templ Recipe(r partial.RecipeEntity) {
 	@layout.Base(layout.SEOInfo{
-		Title:       "Recipe",
-		Url:         "/recipe",
+		Title:       r.Title,
+		Url:         fmt.Sprintf("/recipe/%s", slug.Make(r.Title)),
 		IsHome:      false,
-		Description: "Some recipe",
+		Description: r.Foreword,
 	}) {
-		<h2 class="sr-only">Filters</h2>
-		<div class="border-b border-gray-200 bg-white pb-4">
-			<div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"></div>
+		<div class="flex flex-col-reverse lg:flex-row gap-4 lg:gap-0 ">
+			<div class="basis-1/2 pt-6 px-4">
+				<a href="/recipes" class="text-emerald-600 leading-6 text-medium"><span aria-hidden="true">&larr;</span> Back to Recipes</a>
+				<h2 class="text-emerald-600 tracking-tight font-bold text-3xl mt-4">{ r.Title }</h2>
+				<p class="my-4 text-sm text-gray-700">{ r.Foreword }</p>
+				<div class="flex flex-wrap flex-row gap-x-2 gap-y-4">
+					for _, s := range getRecipeAttribs(r) {
+						<span class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-600 ring-1 ring-inset ring-emerald-600/20">
+							{ s }
+						</span>
+					}
+				</div>
+				<div class="flex flex-col lg:flex-row gap-x-8">
+					<div class="basis-1/2">
+						<h3 class="text-emerald-600 tracking-tight font-bold text-xl mt-4">Ingredients</h3>
+						<ul class="pl-2">
+							for _, i := range strings.Split(r.Ingredients, "\n") {
+								<li class="my-2">
+									{ i }
+								</li>
+							}
+						</ul>
+					</div>
+					<div class="basis-1/2">
+						<h3 class="text-emerald-600 tracking-tight font-bold text-xl mt-4">Method</h3>
+						<div class="my-2 leading-6">
+							@templ.Raw(mdToHtml(r.Method))
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="basis-1/2">
+				<img
+					alt="recipe image"
+					src={ helpers.GetStrapiMediaUrl(r.Images.Data[0].Attributes.Url) }
+					class="object-cover h-[calc(100vh-6rem)]"
+				/>
+			</div>
 		</div>
 	}
 }

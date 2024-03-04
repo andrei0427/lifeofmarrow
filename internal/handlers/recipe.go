@@ -1,14 +1,12 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"slices"
 	"strconv"
 	"strings"
 
 	"github.com/andrei0427/lifeofmarrow/internal"
-	"github.com/andrei0427/lifeofmarrow/view/layout"
 	"github.com/andrei0427/lifeofmarrow/view/pages"
 	"github.com/andrei0427/lifeofmarrow/view/pages/errors"
 	"github.com/andrei0427/lifeofmarrow/view/partial"
@@ -137,12 +135,6 @@ func HandleRecipesPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleRecipePage(w http.ResponseWriter, r *http.Request) {
-	seo := layout.SEOInfo{
-		Title:       "Recipes",
-		Url:         "/recipes",
-		Description: "A wide variety of colorful, healthy and vegan recipes from my collection",
-	}
-
 	slug := r.PathValue("slug")
 	if len(slug) == 0 {
 		errors.NotFoundError().Render(r.Context(), w)
@@ -157,13 +149,5 @@ func HandleRecipePage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	seo.Title = (*recipe)[0].Title
-	seo.Description = (*recipe)[0].Foreword
-	seo.Url = fmt.Sprintf("/recipe/%s", slug)
-
-	if len((*recipe)[0].Images.Data) > 0 {
-		seo.ImageUrl = (*recipe)[0].Images.Data[0].Attributes.Url
-	}
-
-	pages.Recipe().Render(r.Context(), w)
+	pages.Recipe((*recipe)[0]).Render(r.Context(), w)
 }
