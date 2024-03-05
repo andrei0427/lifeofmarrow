@@ -2269,6 +2269,10 @@ select {
     display: none;
   }
 
+  .lg\:h-\[calc\(100vh-6rem\)\] {
+    height: calc(100vh - 6rem);
+  }
+
   .lg\:max-w-lg {
     max-width: 32rem;
   }
