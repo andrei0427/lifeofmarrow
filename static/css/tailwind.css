@@ -832,6 +832,18 @@ select {
   top: 100%;
 }
 
+.-left-16 {
+  left: -4rem;
+}
+
+.-left-24 {
+  left: -6rem;
+}
+
+.-left-32 {
+  left: -8rem;
+}
+
 .isolate {
   isolation: isolate;
 }
