@@ -1,4 +1,4 @@
-<div class=\"bg-white relative hover:text-emerald-600\" _=\"
+<div class=\"bg-emerald-50 relative hover:text-emerald-600\" _=\"
 \"><a href=\"
 \" class=\"opacity-0 transition-all duration-500\" _=\"init remove .opacity-0 from me\"><div class=\"img transition-all ease-in-out duration-150\"><div class=\"absolute top-3 left-3 text-white font-medium text-lg z-[5]\">
 <div class=\"inline-flex uppercase items-baseline rounded-full mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600\"><span class=\"sr-only\">Type</span> 

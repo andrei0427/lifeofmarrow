@@ -61,7 +61,7 @@ type RequirementsRelation struct {
 
 templ RecipeTile(r RecipeEntity, pageNo int, isLast bool) {
 	<div
-		class="bg-white relative hover:text-emerald-600"
+		class="bg-emerald-50 relative hover:text-emerald-600"
 		_={ `on mouseover add .scale-90 to (.img in me) add .text-gray-900 to (<h3/> in me) end
 				on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (<h3/> in me) end` }
 	>

@@ -145,7 +145,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
           From: "translate-x-0"
           To: "translate-x-full"
       -->
-				<div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+				<div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-emerald-50 py-4 pb-12 shadow-xl">
 					<div class="flex items-center justify-between px-4">
 						<h2 class="text-lg font-medium text-gray-900">Filters</h2>
 						<button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400">
@@ -269,7 +269,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 		<!-- Filters -->
 		<section aria-labelledby="filter-heading">
 			<h2 id="filter-heading" class="sr-only">Filters</h2>
-			<div class="border-b border-gray-200 bg-white pb-4">
+			<div class="border-b border-gray-200 bg-emerald-50 pb-4">
 				<div class="mx-auto flex w-screen items-center justify-between px-4 sm:px-6 lg:px-8">
 					<!-- Mobile filter dialog toggle, controls the 'mobileFiltersOpen' state. -->
 					<button type="button" class="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden">Filters</button>
@@ -295,7 +295,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 											<path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path>
 										</svg>
 									</button>
-									<div id="ddl-mealtype" class="hidden absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+									<div id="ddl-mealtype" class="hidden absolute left-3 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
 										<form class="space-y-4">
 											for _, mt := range filters.MealTypes.Data {
 												<div class="flex items-center">
@@ -339,7 +339,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 											<path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path>
 										</svg>
 									</button>
-									<div id="ddl-cuisine" class="hidden absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+									<div id="ddl-cuisine" class="hidden absolute left-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
 										<form class="space-y-4">
 											for _, c := range filters.Cuisines.Data {
 												<div class="flex items-center">
@@ -386,7 +386,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 											<path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path>
 										</svg>
 									</button>
-									<div id="ddl-duration" class="hidden absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+									<div id="ddl-duration" class="hidden absolute left-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
 										<form class="space-y-4">
 											for _, d := range filters.Durations.Data {
 												<div class="flex items-center">
@@ -430,7 +430,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 											<path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path>
 										</svg>
 									</button>
-									<div id="ddl-requirements" class="hidden absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+									<div id="ddl-requirements" class="hidden absolute left-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
 										<form class="space-y-4">
 											for _, r := range filters.Requirements.Data {
 												<div class="flex items-center">
@@ -461,7 +461,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 					<div class="relative inline-block text-left">
 						<div class="relative mt-2 rounded-md shadow-sm">
 							<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
-								<span class="text-gray-500 sm:text-sm">
+								<span class="text-emerald-600 sm:text-sm">
 									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
 										<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
 									</svg>
@@ -477,7 +477,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 								name="search"
 								id="search"
 								value={ filters.SearchText }
-								class="block w-full rounded-md border-0 py-1.5 pl-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
+								class="block w-full bg-emerald-50 rounded-md border-0 py-1.5 pl-7 text-emerald-600 ring-1 ring-inset ring-emerald-200 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
 								placeholder="Aubergine"
 							/>
 						</div>
@@ -486,8 +486,8 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 			</div>
 			<!-- Active filters -->
 			if len(filters.SelectedMealTypes.Data) > 0 || len(filters.SelectedCuisines.Data) > 0 || len(filters.SelectedDurations.Data) > 0 || len(filters.SelectedRequirements.Data) > 0 {
-				<div class="bg-gray-100">
-					<div class="mx-auto max-w-7xl px-4 py-3 sm:flex sm:items-center sm:px-6 lg:px-8">
+				<div class="bg-emerald-50">
+					<div class="max-w-7xl px-4 py-3 sm:flex sm:items-center sm:px-6 lg:px-8">
 						<h3 class="text-sm font-medium text-gray-500">
 							Filters
 							<span class="sr-only">, active</span>

@@ -12,7 +12,7 @@ templ Books(books []helpers.StoreItem) {
 	}) {
 		<div class="flex flex-col border-b border-gray-200 lg:border-0">
 			<div class="relative">
-				<div aria-hidden="true" class="absolute hidden h-full w-1/2 bg-gray-100 lg:block"></div>
+				<div aria-hidden="true" class="absolute hidden h-full w-1/2 bg-emerald-50 lg:block"></div>
 				<div class="relative bg-gray-100 lg:bg-transparent">
 					<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:grid lg:grid-cols-2 lg:px-8">
 						<div class="mx-auto max-w-2xl py-24 lg:max-w-none lg:py-64">
@@ -26,7 +26,7 @@ templ Books(books []helpers.StoreItem) {
 						</div>
 					</div>
 				</div>
-				<div class="w-full lg:absolute lg:right-0 lg:top-0 lg:h-full lg:w-1/2 bg-gray-100">
+				<div class="w-full lg:absolute lg:right-0 lg:top-0 lg:h-full lg:w-1/2 bg-emerald-50">
 					<img src={ helpers.GetStrapiMediaUrl(books[0].Images.Data[0].Attributes.Url) } alt="" class="h-full w-full object-contain object-left"/>
 				</div>
 			</div>
