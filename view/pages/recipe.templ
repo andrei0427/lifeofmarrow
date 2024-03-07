@@ -50,6 +50,9 @@ templ Recipe(r partial.RecipeEntity) {
 			<div class="basis-1/2 pt-6 px-4">
 				<a href="/recipes" class="text-emerald-600 leading-6 text-medium"><span aria-hidden="true">&larr;</span> Back to Recipes</a>
 				<h2 class="text-emerald-600 tracking-tight font-bold text-3xl mt-4">{ r.Title }</h2>
+				if len(r.PortionSize) > 0 {
+					<h4 class="text-emerald-600 tracking-tight text-md">Serves { r.PortionSize }</h4>
+				}
 				<p class="my-4 text-sm text-gray-700">{ r.Foreword }</p>
 				<div class="flex flex-wrap flex-row gap-x-2 gap-y-4">
 					for _, s := range getRecipeAttribs(r) {
