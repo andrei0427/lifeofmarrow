@@ -37,32 +37,28 @@ type SelectedRecipeFilters struct {
 
 func NewSelectedRecipeFilters(r *http.Request) (*SelectedRecipeFilters, error) {
 	mealTypes, err := internal.GetRecordCollectionFromStrapi[MealType](internal.StrapiQueryOptions{
-		Endpoint:     "meal-types",
-		IsCollection: true,
+		Endpoint: "meal-types",
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	cuisines, err := internal.GetRecordCollectionFromStrapi[Cuisine](internal.StrapiQueryOptions{
-		Endpoint:     "cuisines",
-		IsCollection: true,
+		Endpoint: "cuisines",
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	durations, err := internal.GetRecordCollectionFromStrapi[Duration](internal.StrapiQueryOptions{
-		Endpoint:     "durations",
-		IsCollection: true,
+		Endpoint: "durations",
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	requirements, err := internal.GetRecordCollectionFromStrapi[Requirements](internal.StrapiQueryOptions{
-		Endpoint:     "requirements",
-		IsCollection: true,
+		Endpoint: "requirements",
 	})
 	if err != nil {
 		return nil, err
@@ -156,7 +152,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(filters.SelectedMealTypes.Data)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 295, Col: 61}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 291, Col: 61}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -213,7 +209,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(mt.Attributes.Type)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 320, Col: 152}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 316, Col: 152}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -236,7 +232,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(filters.SelectedCuisines.Data)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 339, Col: 60}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 335, Col: 60}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -293,7 +289,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(c.Attributes.Cuisine)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 367, Col: 36}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 363, Col: 36}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -316,7 +312,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(filters.SelectedDurations.Data)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 386, Col: 61}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 382, Col: 61}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -373,7 +369,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(d.Attributes.Time)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 411, Col: 150}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 407, Col: 150}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -396,7 +392,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(filters.SelectedRequirements.Data)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 430, Col: 64}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 426, Col: 64}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -453,7 +449,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(r.Attributes.Requirement)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 455, Col: 152}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 451, Col: 152}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -497,7 +493,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 				var templ_7745c5c3_Var10 string
 				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(smt.Attributes.Type)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 503, Col: 37}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 499, Col: 37}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 				if templ_7745c5c3_Err != nil {
@@ -518,7 +514,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 				var templ_7745c5c3_Var11 string
 				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(smt.Attributes.Type)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 515, Col: 72}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 511, Col: 72}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
@@ -545,7 +541,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 				var templ_7745c5c3_Var12 string
 				templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(c.Attributes.Cuisine)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 528, Col: 38}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 524, Col: 38}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 				if templ_7745c5c3_Err != nil {
@@ -566,7 +562,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 				var templ_7745c5c3_Var13 string
 				templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(c.Attributes.Cuisine)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 540, Col: 73}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 536, Col: 73}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 				if templ_7745c5c3_Err != nil {
@@ -593,7 +589,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 				var templ_7745c5c3_Var14 string
 				templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(d.Attributes.Time)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 553, Col: 35}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 549, Col: 35}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 				if templ_7745c5c3_Err != nil {
@@ -614,7 +610,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 				var templ_7745c5c3_Var15 string
 				templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(d.Attributes.Time)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 565, Col: 70}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 561, Col: 70}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 				if templ_7745c5c3_Err != nil {
@@ -641,7 +637,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 				var templ_7745c5c3_Var16 string
 				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(r.Attributes.Requirement)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 578, Col: 42}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 574, Col: 42}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 				if templ_7745c5c3_Err != nil {
@@ -662,7 +658,7 @@ func RecipeFilters(filters SelectedRecipeFilters) templ.Component {
 				var templ_7745c5c3_Var17 string
 				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(r.Attributes.Requirement)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 590, Col: 77}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/recipe_filters.templ`, Line: 586, Col: 77}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 				if templ_7745c5c3_Err != nil {

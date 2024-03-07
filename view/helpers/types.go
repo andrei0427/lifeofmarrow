@@ -33,3 +33,17 @@ type ContentSection struct {
 	Text    string      `json:"text"`
 	CTALink CTA         `json:"ctalink"`
 }
+
+type StoreItem struct {
+	Title                   string                `json:"Title"`
+	Images                  StrapiMediaCollection `json:"Images"`
+	Description             string                `json:"Description"`
+	StripePriceId           string                `json:"StripePriceId"`
+	StripeDiscountedPriceId string                `json:"StripeDiscountedPriceId"`
+	AvailableFrom           string                `json:"AvailableFrom"`
+	AvailableUntil          string                `json:"AvailableUntil"`
+	Hidden                  bool                  `json:"Hidden"`
+	MinOrder                int                   `json:"MinOrder"`
+	MaxOrder                int                   `json:"MaxOrder"`
+	Type                    string                `json:"Type"`
+}

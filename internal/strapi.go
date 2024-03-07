@@ -15,10 +15,17 @@ type StrapiKeyValue struct {
 	Key   string
 	Value string
 }
+
+type StrapiFilter struct {
+	FieldName string
+	Operator  string
+	Value     string
+}
+
 type StrapiQueryOptions struct {
-	Endpoint     string
-	IsCollection bool
-	Params       []StrapiKeyValue
+	Endpoint string
+	Params   []StrapiKeyValue
+	Filters  []StrapiFilter
 }
 
 type StrapiResponse[T any] struct {
@@ -101,6 +108,18 @@ func fetchStrapi(opts StrapiQueryOptions) (*[]byte, error) {
 		}
 
 		uri = fmt.Sprintf("%s?%s", uri, params.Encode())
+	}
+
+	if len(opts.Filters) > 0 {
+		prefix := "?"
+		if strings.Contains(uri, "?") {
+			prefix = "&"
+		}
+
+		for _, f := range opts.Filters {
+			uri = fmt.Sprintf("%s%sfilters[%s][%s]=%s", uri, prefix, f.FieldName, f.Operator, f.Value)
+			prefix = "&"
+		}
 	}
 
 	req, err := http.NewRequest("GET", uri, nil)

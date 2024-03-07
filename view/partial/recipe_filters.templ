@@ -27,32 +27,28 @@ type SelectedRecipeFilters struct {
 
 func NewSelectedRecipeFilters(r *http.Request) (*SelectedRecipeFilters, error) {
 	mealTypes, err := internal.GetRecordCollectionFromStrapi[MealType](internal.StrapiQueryOptions{
-		Endpoint:     "meal-types",
-		IsCollection: true,
+		Endpoint: "meal-types",
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	cuisines, err := internal.GetRecordCollectionFromStrapi[Cuisine](internal.StrapiQueryOptions{
-		Endpoint:     "cuisines",
-		IsCollection: true,
+		Endpoint: "cuisines",
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	durations, err := internal.GetRecordCollectionFromStrapi[Duration](internal.StrapiQueryOptions{
-		Endpoint:     "durations",
-		IsCollection: true,
+		Endpoint: "durations",
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	requirements, err := internal.GetRecordCollectionFromStrapi[Requirements](internal.StrapiQueryOptions{
-		Endpoint:     "requirements",
-		IsCollection: true,
+		Endpoint: "requirements",
 	})
 	if err != nil {
 		return nil, err
