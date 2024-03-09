@@ -38,6 +38,13 @@ func Recipes(props []partial.RecipeEntity, filters partial.SelectedRecipeFilters
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
+			templ_7745c5c3_Err = partial.Heading(partial.HeadingProps{
+				Title:       "Recipes",
+				Description: "Browse through our handpicked favourites that are both healthy and flavorful.",
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 			templ_7745c5c3_Err = partial.RecipeFilters(filters).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

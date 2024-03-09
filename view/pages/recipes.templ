@@ -13,10 +13,10 @@ templ Recipes(props []partial.RecipeEntity, filters partial.SelectedRecipeFilter
 		Description: "Feel free to explore the wide variety of my handpicked healthy, colorful vegan recipes.",
 	}) {
 		<div class="pb-16">
-			<div class="mx-auto w-screen px-4 py-16 sm:px-6 lg:px-8">
-				<h1 class="text-3xl font-bold tracking-tight text-gray-900">Recipes</h1>
-				<p class="mt-4 max-w-xl text-sm text-gray-700">Browse through our handpicked favourites that are both healthy and flavorful.</p>
-			</div>
+			@partial.Heading(partial.HeadingProps{
+				Title:       "Recipes",
+				Description: "Browse through our handpicked favourites that are both healthy and flavorful.",
+			})
 			@partial.RecipeFilters(filters)
 			<div
 				id="recipe-results"

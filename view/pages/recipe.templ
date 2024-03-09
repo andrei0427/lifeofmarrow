@@ -46,15 +46,17 @@ templ Recipe(r partial.RecipeEntity) {
 		IsHome:      false,
 		Description: r.Foreword,
 	}) {
+		@partial.Heading(partial.HeadingProps{
+			Title:       r.Title,
+			Description: r.Foreword,
+		})
 		<div class="flex flex-col-reverse lg:flex-row gap-4 lg:gap-0 ">
-			<div class="basis-1/2 pt-6 px-4">
+			<div class="basis-1/2 pt-6 pl-4">
 				<a href="/recipes" class="text-emerald-600 leading-6 text-medium"><span aria-hidden="true">&larr;</span> Back to Recipes</a>
-				<h2 class="text-emerald-600 tracking-tight font-bold text-3xl mt-4">{ r.Title }</h2>
 				if len(r.PortionSize) > 0 {
 					<h4 class="text-emerald-600 tracking-tight text-md">Serves { r.PortionSize }</h4>
 				}
-				<p class="my-4 text-sm text-gray-700">{ r.Foreword }</p>
-				<div class="flex flex-wrap flex-row gap-x-2 gap-y-4">
+				<div class="flex flex-wrap flex-row gap-x-2 gap-y-4 mt-4">
 					for _, s := range getRecipeAttribs(r) {
 						<span class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-600 ring-1 ring-inset ring-emerald-600/20">
 							{ s }
