@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 	"slices"
+	"sort"
 )
 
 type SelectedRecipeFilters struct {
@@ -32,6 +33,9 @@ func NewSelectedRecipeFilters(r *http.Request) (*SelectedRecipeFilters, error) {
 	if err != nil {
 		return nil, err
 	}
+	sort.Slice(mealTypes.Data, func(i, j int) bool {
+		return mealTypes.Data[i].Attributes.Type < mealTypes.Data[j].Attributes.Type
+	})
 
 	cuisines, err := internal.GetRecordCollectionFromStrapi[Cuisine](internal.StrapiQueryOptions{
 		Endpoint: "cuisines",
@@ -39,6 +43,9 @@ func NewSelectedRecipeFilters(r *http.Request) (*SelectedRecipeFilters, error) {
 	if err != nil {
 		return nil, err
 	}
+	sort.Slice(cuisines.Data, func(i, j int) bool {
+		return cuisines.Data[i].Attributes.Cuisine < cuisines.Data[j].Attributes.Cuisine
+	})
 
 	durations, err := internal.GetRecordCollectionFromStrapi[Duration](internal.StrapiQueryOptions{
 		Endpoint: "durations",
@@ -46,6 +53,9 @@ func NewSelectedRecipeFilters(r *http.Request) (*SelectedRecipeFilters, error) {
 	if err != nil {
 		return nil, err
 	}
+	sort.Slice(durations.Data, func(i, j int) bool {
+		return durations.Data[i].Attributes.Time < durations.Data[j].Attributes.Time
+	})
 
 	requirements, err := internal.GetRecordCollectionFromStrapi[Requirements](internal.StrapiQueryOptions{
 		Endpoint: "requirements",
@@ -53,6 +63,9 @@ func NewSelectedRecipeFilters(r *http.Request) (*SelectedRecipeFilters, error) {
 	if err != nil {
 		return nil, err
 	}
+	sort.Slice(requirements.Data, func(i, j int) bool {
+		return requirements.Data[i].Attributes.Requirement < requirements.Data[j].Attributes.Requirement
+	})
 
 	filters := &SelectedRecipeFilters{
 		MealTypes:    *mealTypes,
