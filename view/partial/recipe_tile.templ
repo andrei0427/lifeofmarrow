@@ -70,6 +70,16 @@ func getMealTypeStrings(mtr MealTypeRelation) []string {
 	return s
 }
 
+func getRequirementStrings(r RequirementsRelation) []string {
+	s := make([]string, 0)
+
+	for _, req := range r.Data {
+		s = append(s, req.Attributes.Requirement)
+	}
+
+	return s
+}
+
 templ RecipeTile(r RecipeEntity, pageNo int, isLast bool) {
 	<div
 		class="basis-full md:basis-1/2 xl:basis-1/3 bg-emerald-50 relative hover:text-emerald-600"
@@ -82,7 +92,7 @@ templ RecipeTile(r RecipeEntity, pageNo int, isLast bool) {
 					if len(r.MealTypes.Data) > 0 {
 						<div class="inline-flex uppercase items-baseline rounded-full text-sm mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
 							<span class="sr-only">Type</span>
-							{ 								strings.Join(getMealTypeStrings(r.MealTypes),", ") }
+							{ strings.Join(getMealTypeStrings(r.MealTypes),", ") }
 						</div>
 					}
 					if len(r.Cuisine.Data.Attributes.Cuisine) > 0 {
@@ -100,12 +110,7 @@ templ RecipeTile(r RecipeEntity, pageNo int, isLast bool) {
 					if len(r.Requirements.Data) > 0 {
 						<div class="inline-flex uppercase items-baseline rounded-full text-sm mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
 							<span class="sr-only">Requirements</span>
-							for i, req := range r.Requirements.Data {
-								{ req.Attributes.Requirement }
-								if len(r.Requirements.Data) -1>i {
-									,
-								}
-							}
+							{ strings.Join(getRequirementStrings(r.Requirements),", ") }
 						</div>
 					}
 				</div>

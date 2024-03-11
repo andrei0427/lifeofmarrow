@@ -8,8 +8,6 @@
 <div class=\"inline-flex uppercase items-baseline rounded-full text-sm mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600\"><span class=\"sr-only\">Duration</span> 
 </div>
 <div class=\"inline-flex uppercase items-baseline rounded-full text-sm mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600\"><span class=\"sr-only\">Requirements</span> 
- 
-,
 </div>
 </div>
 <img src=\"
