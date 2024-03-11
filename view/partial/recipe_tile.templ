@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"github.com/andrei0427/lifeofmarrow/view/helpers"
 	"github.com/gosimple/slug"
+	"strings"
 )
 
 type RecipeEntity struct {
 	Title        string                        `json:"Title"`
 	PortionSize  string                        `json:"PortionSize"`
-	MealType     MealTypeRelation              `json:"meal_type"`
+	MealTypes    MealTypeRelation              `json:"meal_types"`
 	Cuisine      CuisineRelation               `json:"cuisine"`
 	Duration     DurationRelation              `json:"duration"`
 	Requirements RequirementsRelation          `json:"requirements"`
@@ -23,7 +24,7 @@ type MealType struct {
 	Type string `json:"Type"`
 }
 type MealTypeRelation struct {
-	Data struct {
+	Data []struct {
 		Id         int      `json:"id"`
 		Attributes MealType `json:"attributes"`
 	} `json:"Data"`
@@ -59,6 +60,16 @@ type RequirementsRelation struct {
 	} `json:"Data"`
 }
 
+func getMealTypeStrings(mtr MealTypeRelation) []string {
+	s := make([]string, 0)
+
+	for _, mt := range mtr.Data {
+		s = append(s, mt.Attributes.Type)
+	}
+
+	return s
+}
+
 templ RecipeTile(r RecipeEntity, pageNo int, isLast bool) {
 	<div
 		class="basis-full md:basis-1/2 xl:basis-1/3 bg-emerald-50 relative hover:text-emerald-600"
@@ -68,10 +79,10 @@ templ RecipeTile(r RecipeEntity, pageNo int, isLast bool) {
 		<a href={ templ.SafeURL(fmt.Sprintf("/recipe/%s", slug.Make(r.Title))) } class="opacity-0 transition-all duration-500" _="init remove .opacity-0 from me">
 			<div class="img transition-all ease-in-out duration-150">
 				<div class="absolute top-3 left-3 text-white font-medium text-lg z-[5]">
-					if len(r.MealType.Data.Attributes.Type) > 0 {
+					if len(r.MealTypes.Data) > 0 {
 						<div class="inline-flex uppercase items-baseline rounded-full text-sm mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
 							<span class="sr-only">Type</span>
-							{ r.MealType.Data.Attributes.Type }
+							{ 								strings.Join(getMealTypeStrings(r.MealTypes),", ") }
 						</div>
 					}
 					if len(r.Cuisine.Data.Attributes.Cuisine) > 0 {

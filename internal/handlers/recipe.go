@@ -19,7 +19,7 @@ func getRecipes(pageNo int, filters partial.SelectedRecipeFilters) (*[]partial.R
 	collection, err := internal.GetRecordCollectionFromStrapi[partial.RecipeEntity](internal.StrapiQueryOptions{
 		Endpoint: "recipes",
 		Params: []internal.StrapiKeyValue{
-			{Key: "populate[0]", Value: "meal_type"},
+			{Key: "populate[0]", Value: "meal_types"},
 			{Key: "populate[1]", Value: "cuisine"},
 			{Key: "populate[2]", Value: "duration"},
 			{Key: "populate[3]", Value: "requirements"},
@@ -34,10 +34,6 @@ func getRecipes(pageNo int, filters partial.SelectedRecipeFilters) (*[]partial.R
 	filtered := new([]partial.RecipeEntity)
 	for _, r := range collection.Data {
 
-		if len(filters.SelectedMealTypes.Data) > 0 && !slices.Contains(filters.SelectedMealTypes.Data, r.Attributes.MealType.Data) {
-			continue
-		}
-
 		if len(filters.SelectedCuisines.Data) > 0 && !slices.Contains(filters.SelectedCuisines.Data, r.Attributes.Cuisine.Data) {
 			continue
 		}
@@ -46,11 +42,25 @@ func getRecipes(pageNo int, filters partial.SelectedRecipeFilters) (*[]partial.R
 			continue
 		}
 
-		if len(filters.Requirements.Data) > 0 {
+		if len(filters.SelectedMealTypes.Data) > 0 {
+			hasMealtype := false
+
+			for _, mt := range r.Attributes.MealTypes.Data {
+				if slices.Contains(filters.SelectedMealTypes.Data, mt) {
+					hasMealtype = true
+				}
+			}
+
+			if !hasMealtype {
+				continue
+			}
+		}
+
+		if len(filters.SelectedRequirements.Data) > 0 {
 			hasRequirement := false
 
 			for _, req := range r.Attributes.Requirements.Data {
-				if slices.Contains(filters.Requirements.Data, req) {
+				if slices.Contains(filters.SelectedRequirements.Data, req) {
 					hasRequirement = true
 				}
 			}

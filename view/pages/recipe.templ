@@ -14,16 +14,16 @@ import (
 func getRecipeAttribs(r partial.RecipeEntity) []string {
 	strs := make([]string, 0)
 
-	if r.MealType.Data.Id > 0 {
-		strs = append(strs, r.MealType.Data.Attributes.Type)
-	}
-
 	if r.Cuisine.Data.Id > 0 {
 		strs = append(strs, r.Cuisine.Data.Attributes.Cuisine)
 	}
 
 	if r.Duration.Data.Id > 0 {
 		strs = append(strs, r.Duration.Data.Attributes.Time)
+	}
+
+	for _, mt := range r.MealTypes.Data {
+		strs = append(strs, mt.Attributes.Type)
 	}
 
 	for _, req := range r.Requirements.Data {
