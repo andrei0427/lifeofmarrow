@@ -1,4 +1,4 @@
- <div class=\"flex flex-col-reverse lg:flex-row gap-4 lg:gap-0 \"><div class=\"basis-1/2 pt-6 pl-4\"><a href=\"/recipes\" class=\"text-emerald-600 leading-6 text-medium\"><span aria-hidden=\"true\">&larr;</span> Back to Recipes</a> 
+ <div class=\"flex flex-col-reverse lg:flex-row gap-4 lg:gap-0 \"><div class=\"basis-1/2 pt-6 pl-6\"><a href=\"/recipes\" class=\"text-emerald-600 leading-6 text-medium\"><span aria-hidden=\"true\">&larr;</span> Back to Recipes</a> 
 <h4 class=\"text-emerald-600 tracking-tight text-md\">Serves 
 </h4>
 <div class=\"flex flex-wrap flex-row gap-x-2 gap-y-4 mt-4\">

@@ -39,3 +39,34 @@ func HandleBooks(w http.ResponseWriter, r *http.Request) {
 
 	pages.Books(books).Render(r.Context(), w)
 }
+
+func HandleFood(w http.ResponseWriter, r *http.Request) {
+	isHx := r.Header.Get("Hx-Request") == "true"
+
+	collection, err := internal.GetRecordCollectionFromStrapi[helpers.StoreItem](internal.StrapiQueryOptions{
+		Endpoint: "/services",
+		Params: []internal.StrapiKeyValue{
+			{Key: "populate[0]", Value: "Images"},
+		},
+		Filters: []internal.StrapiFilter{
+			{FieldName: "Type", Operator: "$eq", Value: "Food"},
+		},
+	})
+
+	if err != nil {
+		if isHx {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			errors.InternalServerError().Render(r.Context(), w)
+		}
+
+		return
+	}
+
+	food := make([]helpers.StoreItem, 0)
+	for _, f := range collection.Data {
+		food = append(food, f.Attributes)
+	}
+
+	pages.Food(food).Render(r.Context(), w)
+}

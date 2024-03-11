@@ -1,0 +1,34 @@
+package partial
+
+import "github.com/andrei0427/lifeofmarrow/view/helpers"
+import "fmt"
+import "github.com/gosimple/slug"
+
+templ FoodTile(f helpers.StoreItem) {
+	<div
+		class="bg-emerald-50 relative hover:text-emerald-600"
+		_={ `on mouseover add .scale-90 to (.img in me) add .text-gray-900 to (<h3/> in me) end
+				on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (<h3/> in me) end` }
+	>
+		<a href={ templ.SafeURL(fmt.Sprintf("/store/food/%s", slug.Make(f.Title))) } class="opacity-0 transition-all duration-500" _="init remove .opacity-0 from me">
+			<div class="img transition-all ease-in-out duration-150">
+				if len(f.Images.Data) > 0 {
+					<img
+						src={ helpers.GetStrapiMediaUrl(f.Images.Data[0].Attributes.Url) }
+						class="object-cover aspect-1"
+					/>
+				} else {
+					<img
+						src="/static/img/logo-responsive.png"
+						class="object-cover aspect-1 transition-all ease-in-out duration-150"
+					/>
+				}
+			</div>
+			<div class="py-4 text-emerald-600">
+				<h3 class="text-center text-xl font-sans font-bold leading-6">
+					{ f.Title }
+				</h3>
+			</div>
+		</a>
+	</div>
+}

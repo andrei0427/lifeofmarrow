@@ -6,8 +6,8 @@ type HeadingProps struct {
 }
 
 templ Heading(props HeadingProps) {
-	<div class="mx-auto px-4 py-8 mt-4 sm:px-6 lg:px-8 bg-emerald-600">
+	<div class="mx-auto px-4 py-8 my-4 sm:px-6 lg:px-8 bg-emerald-600">
 		<h1 class="text-center font-sans text-4xl tracking-tight text-white">{ props.Title }</h1>
-		<p class="text-center font-sans mt-2 text-md text-gray-100">{ props.Description }</p>
+		<p class="text-center font-sans mt-2 text-md text-gray-100"><i>{ props.Description }</i></p>
 	</div>
 }

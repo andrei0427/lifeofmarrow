@@ -29,9 +29,12 @@ func initHttp() error {
 
 	mux.HandleFunc("/purge", handlers.HandlePurge)
 	mux.HandleFunc("/about", handlers.HandleAbout)
+
 	mux.HandleFunc("/recipes/{p...}", handlers.HandleRecipesPage)
 	mux.HandleFunc("/recipe/{slug}", handlers.HandleRecipePage)
+
 	mux.HandleFunc("/store/books", handlers.HandleBooks)
+	mux.HandleFunc("/store/food", handlers.HandleFood)
 
 	mux.HandleFunc("/404", handlers.Handle404)
 	mux.HandleFunc("/503", handlers.Handle503)

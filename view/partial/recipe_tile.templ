@@ -61,7 +61,7 @@ type RequirementsRelation struct {
 
 templ RecipeTile(r RecipeEntity, pageNo int, isLast bool) {
 	<div
-		class="bg-emerald-50 relative hover:text-emerald-600"
+		class="basis-full md:basis-1/2 xl:basis-1/3 bg-emerald-50 relative hover:text-emerald-600"
 		_={ `on mouseover add .scale-90 to (.img in me) add .text-gray-900 to (<h3/> in me) end
 				on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (<h3/> in me) end` }
 	>
@@ -69,25 +69,25 @@ templ RecipeTile(r RecipeEntity, pageNo int, isLast bool) {
 			<div class="img transition-all ease-in-out duration-150">
 				<div class="absolute top-3 left-3 text-white font-medium text-lg z-[5]">
 					if len(r.MealType.Data.Attributes.Type) > 0 {
-						<div class="inline-flex uppercase items-baseline rounded-full mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
+						<div class="inline-flex uppercase items-baseline rounded-full text-sm mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
 							<span class="sr-only">Type</span>
 							{ r.MealType.Data.Attributes.Type }
 						</div>
 					}
 					if len(r.Cuisine.Data.Attributes.Cuisine) > 0 {
-						<div class="inline-flex uppercase items-baseline rounded-full mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
+						<div class="inline-flex uppercase items-baseline rounded-full text-sm mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
 							<span class="sr-only">Cuisine</span>
 							{ r.Cuisine.Data.Attributes.Cuisine }
 						</div>
 					}
 					if len(r.Duration.Data.Attributes.Time) > 0 {
-						<div class="inline-flex uppercase items-baseline rounded-full mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
+						<div class="inline-flex uppercase items-baseline rounded-full text-sm mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
 							<span class="sr-only">Duration</span>
 							{ r.Duration.Data.Attributes.Time }
 						</div>
 					}
 					if len(r.Requirements.Data) > 0 {
-						<div class="inline-flex uppercase items-baseline rounded-full mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
+						<div class="inline-flex uppercase items-baseline rounded-full text-sm mr-0.5 px-2.5 py-0.5 md:mt-2 lg:mt-0 bg-emerald-600">
 							<span class="sr-only">Requirements</span>
 							for i, req := range r.Requirements.Data {
 								{ req.Attributes.Requirement }

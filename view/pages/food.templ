@@ -1,0 +1,27 @@
+package pages
+
+import "github.com/andrei0427/lifeofmarrow/view/layout"
+import "github.com/andrei0427/lifeofmarrow/view/partial"
+import "github.com/andrei0427/lifeofmarrow/view/helpers"
+
+templ Food(items []helpers.StoreItem) {
+	@layout.Base(layout.SEOInfo{
+		Title:       "Shop - Food",
+		Url:         "/store/food",
+		IsHome:      false,
+		Description: "Artisinal & organic food and treats all made with love.",
+	}) {
+		@partial.Heading(partial.HeadingProps{
+			Title:       "Food",
+			Description: "Help yourself to my speciality food items. Freshly made and delivered between 3-5 days.",
+		})
+		<div
+			id="food-results"
+			class="inline-grid border bg-emerald-600 gap-[1px] py-[1px] grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
+		>
+			for _, f := range items {
+				@partial.FoodTile(f)
+			}
+		</div>
+	}
+}
