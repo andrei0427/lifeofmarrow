@@ -1,4 +1,4 @@
-<div class=\"bg-emerald-50 relative hover:text-emerald-600\" _=\"
+<div class=\"basis-full md:basis-1/2 xl:basis-1/3 bg-emerald-50 relative hover:text-emerald-600\" _=\"
 \"><a href=\"
 \" class=\"opacity-0 transition-all duration-500\" _=\"init remove .opacity-0 from me\"><div class=\"img transition-all ease-in-out duration-150\">
 <img src=\"

@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"slices"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -87,6 +88,9 @@ func getRecipes(pageNo int, filters partial.SelectedRecipeFilters) (*[]partial.R
 
 		*filtered = append(*filtered, r.Attributes)
 	}
+	sort.Slice(*filtered, func(i, j int) bool {
+		return false
+	})
 
 	c := len(*filtered)
 	start := (pageNo - 1) * pageSize

@@ -107,8 +107,8 @@ func RecipeTile(r RecipeEntity, pageNo int, isLast bool) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(`on mouseover add .scale-90 to (.img in me) add .text-gray-900 to (<h3/> in me) end
-				on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (<h3/> in me) end`))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(`on mouseover add .scale-90 to (.img in me) add .text-gray-900 to (<h3/> in me) remove .hidden from (.stats in me) end
+				on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (<h3/> in me) add .hidden to (.stats in me) end`))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -27,7 +27,7 @@ func Header(isHome bool) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var2 = []any{"hidden lg:flex lg:gap-x-12 pt-6", templ.KV("text-white", isHome), templ.KV("text-gray-900",
+		var templ_7745c5c3_Var2 = []any{"hidden lg:flex lg:gap-x-12 pt-2", templ.KV("text-white", isHome), templ.KV("text-gray-900",
 			!isHome)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {

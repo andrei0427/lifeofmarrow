@@ -34,7 +34,7 @@ func Food(items []helpers.StoreItem) templ.Component {
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
 			templ_7745c5c3_Err = partial.Heading(partial.HeadingProps{
-				Title:       "Food",
+				Title:       "Foods",
 				Description: "Help yourself to my speciality food items. Freshly made and delivered between 3-5 days.",
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {

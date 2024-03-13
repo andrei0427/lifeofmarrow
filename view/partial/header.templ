@@ -1,7 +1,7 @@
 package partial
 
 templ Header(isHome bool) {
-	<header class="relative z-10 font-serif pb-4">
+	<header class="relative z-10 font-serif">
 		<nav class="mx-auto flex items-center flex-col lg:px-8" aria-label="Global">
 			<div class="flex lg:flex-1">
 				<a href="/" class="-m-1.5 p-1.5">
@@ -26,7 +26,7 @@ templ Header(isHome bool) {
 				</button>
 			</div>
 			<div
-				class={ "hidden lg:flex lg:gap-x-12 pt-6", templ.KV("text-white", isHome), templ.KV("text-gray-900",
+				class={ "hidden lg:flex lg:gap-x-12 pt-2", templ.KV("text-white", isHome), templ.KV("text-gray-900",
 				!isHome) }
 			>
 				<a href="/about" class="text-lg font-medium leading-6 hover:text-emerald-600">About</a>
