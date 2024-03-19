@@ -57,7 +57,7 @@ func Contact() templ.Component {
 			return templ_7745c5c3_Err
 		})
 		templ_7745c5c3_Err = layout.Base(layout.SEOInfo{
-			Title:       "Contact me",
+			Title:       "Contact",
 			Url:         "/contact",
 			IsHome:      false,
 			Description: "Fill in the form with your query and I will be in touch shortly!",
