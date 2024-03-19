@@ -1,0 +1,3 @@
+ <div class=\"isolate bg-emerald-50 px-6 lg:px-8\">
+</div>
+<script>\n\tfunction toggleTranslateXOnSwitch(){\n\t\tconst s = document.getElementById(\"switch\");\n\t\tif(!s){\n\t\t\treturn\n\t\t}\n\n\t\ts.classList.toggle('translate-x-0');\n\t\ts.classList.toggle('translate-x-3.5');\n\t}\n\t</script>

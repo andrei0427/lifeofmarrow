@@ -1,0 +1,32 @@
+package pages
+
+import "github.com/andrei0427/lifeofmarrow/view/layout"
+import "github.com/andrei0427/lifeofmarrow/view/partial"
+
+templ Contact() {
+	@layout.Base(layout.SEOInfo{
+		Title:       "Contact me",
+		Url:         "/contact",
+		IsHome:      false,
+		Description: "Fill in the form with your query and I will be in touch shortly!",
+	}) {
+		@partial.Heading(partial.HeadingProps{
+			Title:       "Contact me",
+			Description: "Fill in the form with your query and details and I will reach out to you.",
+		})
+		<div class="isolate bg-emerald-50 px-6 lg:px-8">
+			@partial.ContactForm(partial.ContactFields{}, nil, nil)
+		</div>
+	}
+	<script>
+	function toggleTranslateXOnSwitch(){
+		const s = document.getElementById("switch");
+		if(!s){
+			return
+		}
+
+		s.classList.toggle('translate-x-0');
+		s.classList.toggle('translate-x-3.5');
+	}
+	</script>
+}
