@@ -2,6 +2,7 @@ package pages
 
 import "github.com/andrei0427/lifeofmarrow/view/layout"
 import "github.com/andrei0427/lifeofmarrow/view/helpers"
+import "fmt"
 
 templ Books(books []helpers.StoreItem) {
 	@layout.Base(layout.SEOInfo{
@@ -10,28 +11,38 @@ templ Books(books []helpers.StoreItem) {
 		IsHome:      false,
 		Description: "Explore my cullinary journey through my recipe books",
 	}) {
-		for _,b := range books {
-			<div class="flex flex-col border-b border-gray-200 lg:border-0">
-				<div class="relative">
-					<div aria-hidden="true" class="absolute hidden h-full w-1/2 bg-emerald-50 lg:block"></div>
-					<div class="relative bg-gray-100 lg:bg-transparent">
-						<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:grid lg:grid-cols-2 lg:px-8">
-							<div class="mx-auto max-w-2xl py-24 lg:max-w-none lg:py-64">
-								<div class="lg:pr-16">
-									<h1 class="text-4xl font-bold tracking-tight text-emerald-600 sm:text-5xl xl:text-6xl">{ b.Title }</h1>
-									<p class="mt-4 text-xl text-gray-600">{ b.Description }</p>
-									<div class="mt-6">
-										<a href="#" class="inline-block rounded-md border border-transparent bg-emerald-600 px-8 py-3 font-medium text-white hover:bg-emerald-400">Buy now</a>
+		<div id="container" class="pt-4">
+			for _,b := range books {
+				<div class="flex flex-col border-b border-gray-200 lg:border-0">
+					<div class="relative">
+						<div aria-hidden="true" class="absolute hidden h-full w-1/2 bg-emerald-50 lg:block"></div>
+						<div class="relative bg-gray-100 lg:bg-transparent">
+							<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:grid lg:grid-cols-2 lg:px-8">
+								<div class="mx-auto max-w-2xl py-24 lg:max-w-none lg:py-64">
+									<div class="lg:pr-16">
+										<h1 class="text-4xl font-bold tracking-tight text-emerald-600 sm:text-5xl xl:text-6xl">{ b.Title }</h1>
+										<p class="mt-4 text-xl text-gray-600">{ b.Description }</p>
+										<div class="mt-6">
+											<form method="post" action={ templ.SafeURL(fmt.Sprintf("/store/checkout/%d", b.Id)) }>
+												<button type="submit" class="inline-block rounded-md border border-transparent bg-emerald-600 px-8 py-3 mx-2 font-medium text-white hover:bg-emerald-400 cursor-pointer">Buy now</button>
+											</form>
+											if len(b.DiscountedPrice) > 0 {
+												<span class="line-through">€{ b.DiscountedPrice } </span>
+											}
+											<span>
+												€{ b.Price }
+											</span>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="w-full lg:absolute lg:right-0 lg:top-0 lg:h-full lg:w-1/2 bg-emerald-50">
-						<img src={ helpers.GetStrapiMediaUrl(b.Images.Data[0].Attributes.Url) } alt="" class="h-full w-full object-contain object-left"/>
+						<div class="w-full lg:absolute lg:right-0 lg:top-0 lg:h-full lg:w-1/2 bg-emerald-50">
+							<img src={ helpers.GetStrapiMediaUrl(b.Images.Data[0].Attributes.Url) } alt="" class="h-full w-full object-contain object-left"/>
+						</div>
 					</div>
 				</div>
-			</div>
-		}
+			}
+		</div>
 	}
 }

@@ -9,6 +9,8 @@ import (
 	"github.com/andrei0427/lifeofmarrow/internal"
 	"github.com/andrei0427/lifeofmarrow/internal/handlers"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
+	"github.com/stripe/stripe-go/v76"
 )
 
 func main() {
@@ -16,6 +18,13 @@ func main() {
 	if err != nil {
 		log.Fatal(fmt.Errorf("error reading env file: %s", err))
 	}
+
+	key, ok := os.LookupEnv("STRIPE_KEY")
+	if !ok {
+		log.Fatalf("Stripe API key not found in env")
+	}
+
+	stripe.Key = key
 
 	log.Fatal(initHttp())
 }
@@ -34,8 +43,9 @@ func initHttp() error {
 	mux.HandleFunc("/recipes/{p...}", handlers.HandleRecipesPage)
 	mux.HandleFunc("/recipe/{slug}", handlers.HandleRecipePage)
 
-	mux.HandleFunc("/store/books", handlers.HandleBooks)
-	mux.HandleFunc("/store/food", handlers.HandleFood)
+	mux.HandleFunc("GET /store/books", handlers.HandleBooks)
+	mux.HandleFunc("GET /store/food", handlers.HandleFood)
+	mux.HandleFunc("POST /store/checkout/{id}", handlers.HandleCheckout)
 
 	mux.HandleFunc("/404", handlers.Handle404)
 	mux.HandleFunc("/503", handlers.Handle503)
@@ -47,5 +57,6 @@ func initHttp() error {
 		port = "8080"
 	}
 
-	return http.ListenAndServe(fmt.Sprintf("localhost:%s", port), mux)
+	corsMux := cors.Default().Handler(mux)
+	return http.ListenAndServe(fmt.Sprintf("localhost:%s", port), corsMux)
 }

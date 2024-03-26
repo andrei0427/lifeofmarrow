@@ -35,6 +35,7 @@ type ContentSection struct {
 }
 
 type StoreItem struct {
+	Id                      int                   `json:"id"`
 	Title                   string                `json:"Title"`
 	Images                  StrapiMediaCollection `json:"Images"`
 	Description             string                `json:"Description"`
@@ -46,4 +47,7 @@ type StoreItem struct {
 	MinOrder                int                   `json:"MinOrder"`
 	MaxOrder                int                   `json:"MaxOrder"`
 	Type                    string                `json:"Type"`
+
+	Price           string
+	DiscountedPrice string
 }

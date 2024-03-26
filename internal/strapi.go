@@ -56,7 +56,7 @@ func GetRecordFromStrapi[T any](opts StrapiQueryOptions) (*StrapiResponse[T], er
 	data := new(StrapiResponse[T])
 	err = json.Unmarshal(*body, data)
 	if err != nil {
-		log.Printf("error when unmarshalling response from strapi: %s", err)
+		log.Printf("error when unmarshalling response from strapi: %s\n%s\n\n", err, *body)
 		return nil, fmt.Errorf("internal server error")
 	}
 
