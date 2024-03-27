@@ -122,6 +122,12 @@ func fetchStrapi(opts StrapiQueryOptions) (*[]byte, error) {
 		}
 	}
 
+	prefix := "?"
+	if strings.Contains(uri, "?") {
+		prefix = "&"
+	}
+	uri = fmt.Sprintf("%s%spagination[pageSize]=1000", uri, prefix)
+
 	req, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
 		log.Printf("error loading strapi api: %s", err)

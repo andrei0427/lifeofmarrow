@@ -34,7 +34,6 @@ func getRecipes(pageNo int, filters partial.SelectedRecipeFilters) (*[]partial.R
 
 	filtered := new([]partial.RecipeEntity)
 	for _, r := range collection.Data {
-
 		if len(filters.SelectedCuisines.Data) > 0 && !slices.Contains(filters.SelectedCuisines.Data, r.Attributes.Cuisine.Data) {
 			continue
 		}
