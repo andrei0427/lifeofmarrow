@@ -616,7 +616,7 @@ templ RecipeFilters(filters SelectedRecipeFilters) {
 		const {name: key, value} = target;
 		
 		const params = new URLSearchParams(window.location.search);
-		const kv = Array.from(params.entries()).filter(([k,v]) => k !== key && v !== '');
+		const kv = Array.from(params.entries()).filter(([k,v]) => k !== key);
 
 		const newUrl = window.location.pathname + '?' + kv.map(([k,v]) => `${k}=${v}`).join('&');
 		target.setAttribute('hx-get', newUrl);

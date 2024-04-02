@@ -88,7 +88,7 @@ func getRecipes(pageNo int, filters partial.SelectedRecipeFilters) (*[]partial.R
 		*filtered = append(*filtered, r.Attributes)
 	}
 	sort.Slice(*filtered, func(i, j int) bool {
-		return false
+		return true
 	})
 
 	c := len(*filtered)

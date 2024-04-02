@@ -3,12 +3,13 @@ module github.com/andrei0427/lifeofmarrow
 go 1.22
 
 require (
-	github.com/a-h/templ v0.2.598
+	github.com/a-h/templ v0.2.648
 	github.com/gosimple/slug v1.13.1
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/cors v1.8.3
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/stretchr/testify v1.8.4
+	github.com/stripe/stripe-go v70.15.0+incompatible
 	github.com/stripe/stripe-go/v76 v76.22.0
 )
 

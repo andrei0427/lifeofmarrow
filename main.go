@@ -46,6 +46,9 @@ func initHttp() error {
 	mux.HandleFunc("GET /store/books", handlers.HandleBooks)
 	mux.HandleFunc("GET /store/food", handlers.HandleFood)
 	mux.HandleFunc("POST /store/checkout/{id}", handlers.HandleCheckout)
+	mux.HandleFunc("GET /store/checkout/cancel", handlers.HandleCheckoutCancel)
+	mux.HandleFunc("GET /store/checkout/success", handlers.HandleCheckoutSuccess)
+	mux.HandleFunc("POST /store/webhook", handlers.HandleStripeWebhook)
 
 	mux.HandleFunc("/404", handlers.Handle404)
 	mux.HandleFunc("/503", handlers.Handle503)

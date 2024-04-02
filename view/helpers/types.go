@@ -50,4 +50,26 @@ type StoreItem struct {
 
 	Price           string
 	DiscountedPrice string
+
+	Shipping []StoreItemShipping `json:"Shipping"`
+}
+
+func (i *StoreItem) GetShippingRateId(loc string) (string, bool) {
+	itemShippingId := ""
+	ok := false
+
+	for _, s := range i.Shipping {
+		if s.Location == loc {
+			itemShippingId = s.StripeShippingId
+			ok = true
+			break
+		}
+	}
+
+	return itemShippingId, ok
+}
+
+type StoreItemShipping struct {
+	Location         string `json:"Location"`
+	StripeShippingId string `json:"stripeShippingId"`
 }
