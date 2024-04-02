@@ -29,6 +29,7 @@ func HandleBooks(w http.ResponseWriter, r *http.Request) {
 		Endpoint: "/services",
 		Params: []internal.StrapiKeyValue{
 			{Key: "populate[0]", Value: "Images"},
+			{Key: "populate[1]", Value: "Shipping"},
 		},
 		Filters: []internal.StrapiFilter{
 			{FieldName: "Type", Operator: "$eq", Value: "Book"},
@@ -101,6 +102,7 @@ func HandleFood(w http.ResponseWriter, r *http.Request) {
 		Endpoint: "/services",
 		Params: []internal.StrapiKeyValue{
 			{Key: "populate[0]", Value: "Images"},
+			{Key: "populate[1]", Value: "Shipping"},
 		},
 		Filters: []internal.StrapiFilter{
 			{FieldName: "Type", Operator: "$eq", Value: "Food"},
@@ -154,9 +156,9 @@ func HandleCheckout(w http.ResponseWriter, r *http.Request) {
 	}
 
 	paymType := "card"
-	rawQuantity := r.Form.Get("quantity")
-	shipTo := r.Form.Get("shipTo")
-	couponId := r.Form.Get("couponId")
+	rawQuantity := r.FormValue("quantity")
+	shipTo := r.FormValue("shipTo")
+	couponId := r.FormValue("couponId")
 
 	possibleShippingLocations := []string{"MT", "EU", "US", "GB", "AU"}
 	if len(shipTo) == 0 {
