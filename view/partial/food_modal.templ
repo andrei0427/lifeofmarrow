@@ -1,0 +1,89 @@
+package partial
+
+import "github.com/andrei0427/lifeofmarrow/view/helpers"
+import "fmt"
+
+templ FoodModal(item helpers.StoreItem) {
+<div id="modal-container"
+	_="on load async transition #modal-backdrop's opacity to 100 over 300ms then async transition #modal-panel's opacity to 100 over 300ms end"
+	class="relative z-10" role="dialog" aria-modal="true">
+	<div id="modal-backdrop" class="opacity-0 fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity md:block">
+	</div>
+	<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+		<div class="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
+			<!-- This element is to trick the browser into centering the modal contents. -->
+			<span class="hidden md:inline-block md:h-screen md:align-middle" aria-hidden="true">&#8203;</span>
+			<div _="on click elsewhere async transition #modal-backdrop's opacity to 0 over 200ms then async transition #modal-panel's opacity to 0 over 200ms then wait 200ms then remove #modal-container end"
+				id="modal-panel"
+				class="flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl">
+				<div
+					class="relative flex w-full items-center overflow-hidden bg-white px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
+					<button type="button"
+						_="on click async transition #modal-backdrop's opacity to 0 over 200ms then async transition #modal-panel's opacity to 0 over 200ms then wait 200ms then remove #modal-container end"
+						class="absolute right-4 top-4 text-gray-400 hover:text-gray-500 sm:right-6 sm:top-8 md:right-6 md:top-6 lg:right-8 lg:top-8">
+						<span class="sr-only">Close</span>
+						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+							aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+						</svg>
+					</button>
+					<div
+						class="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:items-center lg:gap-x-8">
+						<div
+							class="aspect-h-3 aspect-w-3 overflow-hidden rounded-lg bg-gray-100 sm:col-span-4 lg:col-span-5">
+							<img src={ helpers.GetStrapiMediaUrl(item.Images.Data[0].Attributes.Url) } alt={
+								fmt.Sprintf("Product image for the %s food item", item.Title) }
+								class="object-contain object-center" />
+						</div>
+						<div class="sm:col-span-8 lg:col-span-7">
+							<h2 class="text-xl font-medium text-gray-900 sm:pr-12">
+								{ item.Title }
+							</h2>
+							<section aria-labelledby="information-heading" class="mt-1">
+								<h3 id="information-heading" class="sr-only">
+									Product
+									information
+								</h3>
+								if len(item.Price) > 0 {
+								<p class="font-medium text-gray-900">
+									€{ item.Price }
+								</p>
+								}
+							</section>
+							<section aria-labelledby="description-heading" class="mt-8">
+								<div>
+									<h4 class="text-sm font-medium text-gray-900">
+										{ item.Description }
+									</h4>
+								</div>
+							</section>
+							<section aria-labelledby="options-heading" class="mt-8">
+								<h3 id="options-heading" class="sr-only">
+									Product options
+								</h3>
+								<div>
+									<div class="relative">
+										<label for="quantity"
+											class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Quantity</label>
+										<input type="number" name="quantity" id="quantity"
+											class="block w-36 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
+											value="1" />
+									</div>
+								</div>
+								<button type="submit"
+									class="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-emerald-600 px-8 py-3 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+									Add
+									to bag
+								</button>
+							</section>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+}
+
+script handleAddToBag(itemId int, qty int) {
+}

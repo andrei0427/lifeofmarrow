@@ -12,9 +12,8 @@ import "bytes"
 
 import "github.com/andrei0427/lifeofmarrow/view/helpers"
 import "fmt"
-import "github.com/gosimple/slug"
 
-func FoodTile(f helpers.StoreItem) templ.Component {
+func FoodModal(item helpers.StoreItem) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -32,12 +31,9 @@ func FoodTile(f helpers.StoreItem) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(`on mouseover add
-	.scale-90 to (.img in me) add .text-gray-900 to (<h3 /> in me) end
-on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (
-<h3 /> in me) end`)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.GetStrapiMediaUrl(item.Images.Data[0].Attributes.Url))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/food_tile.templ`, Line: 11, Col: 18}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/food_modal.templ`, Line: 34, Col: 79}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -48,9 +44,10 @@ on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/store/food/%s", slug.Make(f.Title)))
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(
+			fmt.Sprintf("Product image for the %s food item", item.Title))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/food_tile.templ`, Line: 13, Col: 63}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/food_modal.templ`, Line: 35, Col: 69}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -60,25 +57,33 @@ on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if len(f.Images.Data) > 0 {
-			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 4)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.GetStrapiMediaUrl(f.Images.Data[0].Attributes.Url))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/food_tile.templ`, Line: 17, Col: 71}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
+		var templ_7745c5c3_Var4 string
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(item.Title)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/food_modal.templ`, Line: 40, Col: 20}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 4)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if len(item.Price) > 0 {
 			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 5)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-		} else {
+			var templ_7745c5c3_Var5 string
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.Price)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/food_modal.templ`, Line: 49, Col: 24}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 6)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -88,12 +93,12 @@ on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(f.Title)
+		var templ_7745c5c3_Var6 string
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(item.Description)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/food_tile.templ`, Line: 25, Col: 12}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/partial/food_modal.templ`, Line: 56, Col: 28}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -106,4 +111,13 @@ on mouseout remove .scale-90 from (.img in me) remove .text-gray-900 from (
 		}
 		return templ_7745c5c3_Err
 	})
+}
+
+func handleAddToBag(itemId int, qty int) templ.ComponentScript {
+	return templ.ComponentScript{
+		Name:       `__templ_handleAddToBag_e3b0`,
+		Function:   `function __templ_handleAddToBag_e3b0(itemId, qty){}`,
+		Call:       templ.SafeScript(`__templ_handleAddToBag_e3b0`, itemId, qty),
+		CallInline: templ.SafeScriptInline(`__templ_handleAddToBag_e3b0`, itemId, qty),
+	}
 }

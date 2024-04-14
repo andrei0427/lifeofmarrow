@@ -2,8 +2,7 @@
 <div class=\"flex flex-col border-b border-gray-200 lg:border-0\"><div class=\"relative\"><div aria-hidden=\"true\" class=\"absolute hidden h-full w-1/2 bg-emerald-50 lg:block\"></div><div class=\"relative bg-gray-100 lg:bg-transparent\"><div class=\"mx-auto max-w-7xl px-4 sm:px-6 lg:grid lg:grid-cols-2 lg:px-8\"><div class=\"mx-auto max-w-2xl py-24 lg:max-w-none lg:py-64\"><div class=\"lg:pr-16\"><h1 class=\"text-4xl font-bold tracking-tight text-emerald-600 sm:text-5xl xl:text-6xl\">
 </h1><p class=\"mt-4 text-xl text-gray-600\">
 </p><div class=\"mt-6\"><form method=\"post\" action=\"
-\"><div class=\"m-2\"><label for=\"country\" class=\"block text-sm font-medium leading-6 text-gray-900\">Deliver to</label><div class=\"mt-2\"><select id=\"shipTo\" name=\"shipTo\" autocomplete=\"country-name\" class=\"block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:max-w-xs sm:text-sm sm:leading-6\">
-<option value=\"MT\">Malta</option>
+\"><div class=\"m-2\"><label for=\"country\" class=\"block text-sm font-medium leading-6 text-gray-900\">Deliver to</label><div class=\"mt-2\"><select id=\"shipTo\" name=\"shipTo\" autocomplete=\"country-name\" class=\"block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:max-w-xs sm:text-sm sm:leading-6\"><option value=\"MT\">Malta</option> 
 <option value=\"EU\">Rest of Europe</option>
 <option value=\"US\">United States & Canada</option>
 <option value=\"UK\">United Kingdom & Northern Ireland</option>

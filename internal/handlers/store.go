@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log/slog"
 	"net/http"
 	"os"
 	"slices"
@@ -16,6 +17,7 @@ import (
 	"github.com/andrei0427/lifeofmarrow/view/pages"
 	"github.com/andrei0427/lifeofmarrow/view/pages/errors"
 	"github.com/andrei0427/lifeofmarrow/view/partial"
+	"github.com/gosimple/slug"
 	"github.com/stripe/stripe-go/v76"
 	"github.com/stripe/stripe-go/v76/checkout/session"
 	"github.com/stripe/stripe-go/v76/price"
@@ -48,6 +50,28 @@ func HandleBooks(w http.ResponseWriter, r *http.Request) {
 
 	books := make([]helpers.StoreItem, 0)
 	for _, b := range collection.Data {
+		if b.Attributes.Hidden {
+			continue
+		}
+
+		if len(b.Attributes.AvailableFrom) > 0 {
+			availableFrom, err := time.Parse(time.RFC3339, b.Attributes.AvailableFrom)
+			if err == nil {
+				if time.Now().Before(availableFrom) {
+					continue
+				}
+			}
+		}
+
+		if len(b.Attributes.AvailableUntil) > 0 {
+			availableUntil, err := time.Parse(time.RFC3339, b.Attributes.AvailableUntil)
+			if err == nil {
+				if time.Now().After(availableUntil) {
+					continue
+				}
+			}
+		}
+
 		book := b.Attributes
 
 		if len(book.StripePriceId) > 0 {
@@ -121,6 +145,66 @@ func HandleFood(w http.ResponseWriter, r *http.Request) {
 
 	food := make([]helpers.StoreItem, 0)
 	for _, f := range collection.Data {
+		if f.Attributes.Hidden {
+			continue
+		}
+
+		if len(f.Attributes.AvailableFrom) > 0 {
+			availableFrom, err := time.Parse(time.RFC3339, f.Attributes.AvailableFrom)
+			if err == nil {
+				if time.Now().Before(availableFrom) {
+					continue
+				}
+			}
+		}
+
+		if len(f.Attributes.AvailableUntil) > 0 {
+			availableUntil, err := time.Parse(time.RFC3339, f.Attributes.AvailableUntil)
+			if err == nil {
+				if time.Now().After(availableUntil) {
+					continue
+				}
+			}
+		}
+
+		if len(f.Attributes.StripePriceId) > 0 {
+			foodPriceCacheKey := fmt.Sprintf("price-%s", f.Attributes.StripePriceId)
+			if ok := internal.Cache.Has(foodPriceCacheKey); !ok {
+				p, err := price.Get(f.Attributes.StripePriceId, &stripe.PriceParams{})
+				if err != nil {
+					errors.InternalServerError().Render(r.Context(), w)
+					return
+				}
+
+				price := fmt.Sprintf("%.2f", p.UnitAmountDecimal/100)
+
+				internal.Cache.Set(foodPriceCacheKey, price)
+				f.Attributes.Price = price
+			} else {
+				price, _ := internal.Cache.Get(foodPriceCacheKey)
+				f.Attributes.Price = (*price).(string)
+			}
+		}
+
+		if len(f.Attributes.StripeDiscountedPriceId) > 0 {
+			foodPriceCacheKey := fmt.Sprintf("price-%s", f.Attributes.StripeDiscountedPriceId)
+			if ok := internal.Cache.Has(foodPriceCacheKey); !ok {
+				p, err := price.Get(f.Attributes.StripeDiscountedPriceId, &stripe.PriceParams{})
+				if err != nil {
+					errors.InternalServerError().Render(r.Context(), w)
+					return
+				}
+
+				price := fmt.Sprintf("%.2f", p.UnitAmountDecimal/100)
+
+				internal.Cache.Set(foodPriceCacheKey, price)
+				f.Attributes.DiscountedPrice = price
+			} else {
+				price, _ := internal.Cache.Get(foodPriceCacheKey)
+				f.Attributes.DiscountedPrice = (*price).(string)
+			}
+		}
+
 		f.Attributes.Id = f.Id
 		food = append(food, f.Attributes)
 	}
@@ -514,4 +598,71 @@ func HandleStripeWebhook(w http.ResponseWriter, req *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+func HandleFoodItem(w http.ResponseWriter, r *http.Request) {
+	isHx := r.Header.Get("Hx-Request") == "true"
+
+	s := r.PathValue("slug")
+	if len(s) == 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	collection, err := internal.GetRecordCollectionFromStrapi[helpers.StoreItem](internal.StrapiQueryOptions{
+		Endpoint: "/services",
+		Params: []internal.StrapiKeyValue{
+			{Key: "populate[0]", Value: "Images"},
+			{Key: "populate[1]", Value: "Shipping"},
+		},
+		Filters: []internal.StrapiFilter{
+			{FieldName: "Type", Operator: "$eq", Value: "Food"},
+		},
+	})
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		slog.Error("Error reading food collection when when calling HandleFoodItem")
+		return
+	}
+
+	var food *helpers.StoreItem
+	for _, f := range collection.Data {
+		if slug.Make(f.Attributes.Title) == s {
+			food = &f.Attributes
+		}
+	}
+
+	if food == nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	if len(food.StripePriceId) > 0 {
+		foodPriceCacheKey := fmt.Sprintf("price-%s", food.StripePriceId)
+		if ok := internal.Cache.Has(foodPriceCacheKey); !ok {
+			p, err := price.Get(food.StripePriceId, &stripe.PriceParams{})
+			if err != nil {
+				errors.InternalServerError().Render(r.Context(), w)
+				return
+			}
+
+			price := fmt.Sprintf("%.2f", p.UnitAmountDecimal/100)
+
+			internal.Cache.Set(foodPriceCacheKey, price)
+			food.Price = price
+		} else {
+			price, _ := internal.Cache.Get(foodPriceCacheKey)
+			food.Price = (*price).(string)
+		}
+	}
+
+	if !isHx {
+		HandleFood(w, r)
+	}
+
+	partial.FoodModal(*food).Render(r.Context(), w)
+
+	return
+
 }
